@@ -26,10 +26,12 @@ const Navbar = () => {
             Login
           </button>
           </Link>
-          <button className="bg-emerald-400 hover:bg-emerald-500 text-black px-5 py-2 rounded-full font-semibold transition">
+         <Link href={'/Register'}
+>
+   <button className="bg-emerald-400 hover:bg-emerald-500 text-black px-5 py-2 rounded-full font-semibold transition">
             Get Started
           </button>
-        </div>
+  </Link>        </div>
       </div>
     </nav>
   );
