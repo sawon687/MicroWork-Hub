@@ -1,36 +1,45 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
-import { Mail, Lock, User, Image, ArrowRight, EyeOff, Eye } from "lucide-react";
+import { Mail, Lock, User, Image, ArrowRight, EyeOff, Eye, CheckCircle, Circle } from "lucide-react";
 import GoogleButton from "@/Components/GoogleButton/GoogleButton";
 import { useForm } from "react-hook-form";
 
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-   const [selectRole,setSelectRole]=useState(' ')
+  const [selectRole, setSelectRole] = useState("");
+  const [preview, setPreview] = useState(null);
 
-
-     const {
+  const {
     register,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
-  } = useForm()
+    formState: { errors,isValid },
+  } = useForm({mode:"onChange"});
 
-  const handleRegister=async(data)=>{
-      console.log(data)
-  }
+  const password = watch("password", "");
+
+  // 🔥 Live validation checks
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSymbol = /[@$!%*?&]/.test(password);
+  const hasLength = password.length >= 6;
+
+  const strength =
+    [hasUppercase, hasNumber, hasSymbol, hasLength].filter(Boolean).length;
+
+  const handleRegister = async (data) => {
+    console.log(data);
+  };
+
   const inputStyle =
     "w-full border-2 border-gray-200 rounded-xl py-3 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500";
 
   return (
-   <>
-   
-    <div className="min-h-screen  pt-40  bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center px-4 ">
+    <div className="min-h-screen pt-40 bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center px-4">
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6">
-        
+
         {/* Header */}
         <div className="text-center mb-5">
           <Link href="/" className="text-2xl font-bold text-emerald-500">
@@ -42,17 +51,27 @@ const RegisterForm = () => {
         </div>
 
         <form onSubmit={handleSubmit(handleRegister)} className="space-y-3">
-          
-          {/* Two Column */}
+
+          {/* Name + Email */}
           <div className="grid grid-cols-2 gap-2">
-            
+
             {/* Name */}
             <div>
               <label className="text-xs text-gray-600">Full Name</label>
-              <div className="relative mt-1 ">
+              <div className="relative mt-1">
                 <User className="absolute left-3 top-4 w-4 h-4 text-gray-400" />
-                <input type="text" placeholder="John" className={inputStyle} {...register('name')} />
+                <input
+                  type="text"
+                  placeholder="John"
+                  className={inputStyle}
+                  {...register("name", {
+                    required: "Name is required ❌",
+                  })}
+                />
               </div>
+              {errors.name && (
+                <p className="text-red-500 text-xs">{errors.name.message}</p>
+              )}
             </div>
 
             {/* Email */}
@@ -60,21 +79,52 @@ const RegisterForm = () => {
               <label className="text-xs text-gray-600">Email</label>
               <div className="relative mt-1">
                 <Mail className="absolute left-3 top-4 w-4 h-4 text-gray-400" />
-                <input type="email" placeholder="you@example.com" className={inputStyle} {...register('email')} />
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  className={inputStyle}
+                  {...register("email", {
+                    required: "Email is required ❌",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email ❌",
+                    },
+                  })}
+                />
               </div>
+              {errors.email && (
+                <p className="text-red-500 text-xs">{errors.email.message}</p>
+              )}
             </div>
 
-            {/* Photo URL */}
+            {/* Photo */}
             <div className="col-span-2">
               <label className="text-xs text-gray-600">Photo</label>
               <div className="relative mt-1">
                 <Image className="absolute left-3 top-4 w-4 h-4 text-gray-400" />
-                <input type="file" className={inputStyle} {...register('photo')} />
+                <input
+                  type="file"
+                    {...register("photo", {
+                    required: "Photo is required ❌",
+                  })}
+                  className={inputStyle}
+                
+
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) setPreview(URL.createObjectURL(file));
+                  }}
+                />
               </div>
+
+              {preview && (
+                <img
+                  src={preview}
+                  className="w-16 h-16 rounded-full mt-2 mx-auto object-cover"
+                />
+              )}
             </div>
-
           </div>
-
 
           {/* Password */}
           <div>
@@ -83,9 +133,16 @@ const RegisterForm = () => {
               <Lock className="absolute left-3 top-4 w-4 h-4 text-gray-400" />
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Min 6 characters"
+                placeholder="Strong password"
                 className={inputStyle}
-                {...register('password')}
+                {...register("password", {
+                  required: "Password is required ❌",
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/,
+                    message: "Weak password ❌",
+                  },
+                })}
               />
 
               <button
@@ -96,59 +153,93 @@ const RegisterForm = () => {
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
+
+            {/* 🔥 Live Validation UI */}
+    <div className="text-xs mt-2 space-y-1">
+
+  <p className={`flex items-center gap-2 ${hasLength ? "text-emerald-500" : "text-gray-400"}`}>
+    {hasLength ? <CheckCircle size={14} /> : <Circle size={14} />}
+    At least 6 characters
+  </p>
+
+  <p className={`flex items-center gap-2 ${hasUppercase ? "text-emerald-500" : "text-gray-400"}`}>
+    {hasUppercase ? <CheckCircle size={14} /> : <Circle size={14} />}
+    Uppercase letter
+  </p>
+
+  <p className={`flex items-center gap-2 ${hasNumber ? "text-emerald-500" : "text-gray-400"}`}>
+    {hasNumber ? <CheckCircle size={14} /> : <Circle size={14} />}
+    Number
+  </p>
+
+  <p className={`flex items-center gap-2 ${hasSymbol ? "text-emerald-500" : "text-gray-400"}`}>
+    {hasSymbol ? <CheckCircle size={14} /> : <Circle size={14} />}
+    Symbol
+  </p>
+
+</div>
+
+            {/* Progress Bar */}
+          
+<div className="w-full bg-gray-200 h-4 rounded mt-2">
+  <div
+    className={`h-4 ${strength? "bg-emerald-500" : ""} rounded transition-all flex justify-end items-center px-1`}
+    style={{ width: `${strength * 25}%` }}
+  >
+    <span className="text-white text-xs font-medium">{`${strength * 25}%`}</span>
+  </div>
+</div>
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Role */}
-        
-
-           {/* Role */}
           <div className="grid grid-cols-2 gap-3">
-
-            {
-                 [' Worker',' Buyer'].map((role,index)=><>
-                 
-                   <button
-              type="button"
-              value={selectRole}
-              {...register('role')}
-              
-              onClick={()=>{setSelectRole(role)
-                setValue('role',role)
-              }}
-              className={`py-3 
-                rounded-xl border text-sm 
-                ${selectRole==role?'border-emerald-500 bg-emerald-100 text-emerald-600':'border-gray-300 text-gray-500'}`}
-     >
-               {role==='Worker' ? '👷 ' : ' 🧑‍💼 '}{role}
-            </button>
-                  </>)
-            }
-          
+            {["Worker", "Buyer"].map((role) => (
+              <button
+                key={role}
+                type="button"
+                onClick={() => {
+                  setSelectRole(role);
+                  setValue("role", role);
+                }}
+                className={`py-3 rounded-xl border text-sm 
+                ${
+                  selectRole === role
+                    ? "border-emerald-500 bg-emerald-100 text-emerald-600"
+                    : "border-gray-300 text-gray-500"
+                }`}
+              >
+                {role === "Worker" ? "👷 Worker" : "🧑‍💼 Buyer"}
+              </button>
+            ))}
           </div>
-          
 
-
-          
+          {errors.role && (
+            <p className="text-red-500 text-xs">Role is required ❌</p>
+          )}
 
           {/* Button */}
-          <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl text-sm font-medium flex items-center justify-center">
+          <button  disabled={!isValid} 
+          className={`w-full ${!isValid?'bg-gray-300 cursor-not-allowed ':' bg-emerald-500 hover:bg-emerald-600'} text-white py-3 rounded-xl text-sm font-medium flex items-center justify-center`}>
             Create Account
             <ArrowRight className="ml-2 w-4 h-4" />
           </button>
-
         </form>
-<GoogleButton></GoogleButton>
+
+        <GoogleButton />
+
         <p className="text-center text-xs text-gray-500 mt-4">
           Already have an account?
           <Link href="/login" className="text-emerald-500 ml-1">
             Sign In
           </Link>
         </p>
-
       </div>
     </div>
-   
-   </>
   );
 };
 
