@@ -4,7 +4,7 @@ const HeadingTage = ({firstText,secondText}) => {
   return (
     <div>
         
-        <h1 className='text-3xl md:text-5xl font-bold text-gray-900 mb-4'>{firstText} <span className='text-emerald-400'>{secondText}</span></h1>
+        <h1 className='text-3xl text-center md:text-5xl font-bold text-gray-900 mb-4'>{firstText} <span className='text-emerald-400'>{secondText}</span></h1>
         </div>
   )
 }

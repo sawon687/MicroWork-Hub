@@ -7,3 +7,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.title-text{
+  @apply text-gray-800
+}
+.paragraph-text{
+  @apply text-gray-500 font-normal 
+}
+.bg-background{
+  @apply bg-gradient-to-r from-emerald-500 to-teal-400
+}
+

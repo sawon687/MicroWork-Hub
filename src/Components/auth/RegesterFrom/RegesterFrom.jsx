@@ -1,26 +1,40 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Mail, Lock, User, Image, ArrowRight, EyeOff, Eye, CheckCircle, Circle } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  Image,
+  ArrowRight,
+  EyeOff,
+  Eye,
+  CheckCircle,
+  Circle,
+  ArrowLeft,
+} from "lucide-react";
 import GoogleButton from "@/Components/GoogleButton/GoogleButton";
 import { useForm } from "react-hook-form";
-
+import { motion } from "framer-motion";
+import MessageModal from '../../Ui/MessageModal';
+import { signIn } from 'next-auth/react';
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [selectRole, setSelectRole] = useState("");
   const [preview, setPreview] = useState(null);
-
+  const [isOpen,setOpen]=useState(false)
+  const [message,setMessage]=useState("")
+  const [loading,setLoading]=useState(false)
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors,isValid },
-  } = useForm({mode:"onChange"});
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
 
   const password = watch("password", "");
 
-  // 🔥 Live validation checks
   const hasUppercase = /[A-Z]/.test(password);
   const hasNumber = /\d/.test(password);
   const hasSymbol = /[@$!%*?&]/.test(password);
@@ -30,18 +44,80 @@ const RegisterForm = () => {
     [hasUppercase, hasNumber, hasSymbol, hasLength].filter(Boolean).length;
 
   const handleRegister = async (data) => {
-    console.log(data);
+   try {
+    setLoading(true)
+     console.log(data);
+      const photo=data.photo?.[0];
+      if(!photo)return alert("Photo is required!")
+      const formData=new FormData();
+      formData.append("image",photo)
+       console.log("KEY:", process.env.NEXT_PUBLIC_IMAGE_API_KEY);
+      const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_API_KEY}`,
+        { method: "POST", body: formData }
+      );
+
+      const imgData=await res.json();
+      data.photo=imgData.data?.display_url;
+      console.log('after image uplaod',data)
+    const result=await(await fetch("/api/sing-up",{
+      method:'POST',
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(data)
+    })).json();
+     if(result.success){
+         setOpen(true);
+         setMessage(result)
+          console.log('message',result)
+          setLoading(false)
+            signIn("credentials",{
+              email:data.email,
+              password:data.password,
+              redirect:'/',
+            })
+
+     }else{
+       setMessage(result)
+       setOpen(true);
+       console.log('message',result)
+       setLoading(false)
+     }
+   } catch (error) {
+     console.log("🔥 ERROR:", error);
+     
+  }finally{
+
+  }
   };
 
   const inputStyle =
     "w-full border-2 border-gray-200 rounded-xl py-3 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500";
 
   return (
-    <div className="min-h-screen pt-40 bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center px-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6">
+    <>
+    <div className="min-h-screen py-16 bg-gradient-to-br from-slate-900 to-slate-800 flex flex-col items-center justify-start px-4 relative">
 
+      {/* 🔙 Back Button (Left Top, Glass Effect) */}
+      <div className="absolute top-6 left-4">
+        <Link href="/">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-gray-100 hover:bg-white/20 transition-all duration-200 shadow-sm hover:shadow-md">
+            <ArrowLeft size={16} />
+            Back
+          </button>
+        </Link>
+      </div>
+
+      {/* Form Card */}
+      <motion.div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 mt-12"
+       initial={{opacity:0,y:50}}
+       animate={{opacity:1,y:0}}
+       transition={{duration:1}}
+      >
+ 
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="text-center mb-4">
           <Link href="/" className="text-2xl font-bold text-emerald-500">
             TaskFlow
           </Link>
@@ -54,7 +130,6 @@ const RegisterForm = () => {
 
           {/* Name + Email */}
           <div className="grid grid-cols-2 gap-2">
-
             {/* Name */}
             <div>
               <label className="text-xs text-gray-600">Full Name</label>
@@ -104,12 +179,10 @@ const RegisterForm = () => {
                 <Image className="absolute left-3 top-4 w-4 h-4 text-gray-400" />
                 <input
                   type="file"
-                    {...register("photo", {
+                  {...register("photo", {
                     required: "Photo is required ❌",
                   })}
                   className={inputStyle}
-                
-
                   onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) setPreview(URL.createObjectURL(file));
@@ -138,13 +211,11 @@ const RegisterForm = () => {
                 {...register("password", {
                   required: "Password is required ❌",
                   pattern: {
-                    value:
-                      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/,
+                    value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/,
                     message: "Weak password ❌",
                   },
                 })}
               />
-
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -154,45 +225,36 @@ const RegisterForm = () => {
               </button>
             </div>
 
-            {/* 🔥 Live Validation UI */}
-    <div className="text-xs mt-2 space-y-1">
-
-  <p className={`flex items-center gap-2 ${hasLength ? "text-emerald-500" : "text-gray-400"}`}>
-    {hasLength ? <CheckCircle size={14} /> : <Circle size={14} />}
-    At least 6 characters
-  </p>
-
-  <p className={`flex items-center gap-2 ${hasUppercase ? "text-emerald-500" : "text-gray-400"}`}>
-    {hasUppercase ? <CheckCircle size={14} /> : <Circle size={14} />}
-    Uppercase letter
-  </p>
-
-  <p className={`flex items-center gap-2 ${hasNumber ? "text-emerald-500" : "text-gray-400"}`}>
-    {hasNumber ? <CheckCircle size={14} /> : <Circle size={14} />}
-    Number
-  </p>
-
-  <p className={`flex items-center gap-2 ${hasSymbol ? "text-emerald-500" : "text-gray-400"}`}>
-    {hasSymbol ? <CheckCircle size={14} /> : <Circle size={14} />}
-    Symbol
-  </p>
-
-</div>
+            {/* Validation */}
+            <div className="text-xs mt-2 space-y-1">
+              <p className={`flex items-center gap-2 ${hasLength ? "text-emerald-500" : "text-gray-400"}`}>
+                {hasLength ? <CheckCircle size={14} /> : <Circle size={14} />}
+                At least 6 characters
+              </p>
+              <p className={`flex items-center gap-2 ${hasUppercase ? "text-emerald-500" : "text-gray-400"}`}>
+                {hasUppercase ? <CheckCircle size={14} /> : <Circle size={14} />}
+                Uppercase letter
+              </p>
+              <p className={`flex items-center gap-2 ${hasNumber ? "text-emerald-500" : "text-gray-400"}`}>
+                {hasNumber ? <CheckCircle size={14} /> : <Circle size={14} />}
+                Number
+              </p>
+              <p className={`flex items-center gap-2 ${hasSymbol ? "text-emerald-500" : "text-gray-400"}`}>
+                {hasSymbol ? <CheckCircle size={14} /> : <Circle size={14} />}
+                Symbol
+              </p>
+            </div>
 
             {/* Progress Bar */}
-          
-<div className="w-full bg-gray-200 h-4 rounded mt-2">
-  <div
-    className={`h-4 ${strength? "bg-emerald-500" : ""} rounded transition-all flex justify-end items-center px-1`}
-    style={{ width: `${strength * 25}%` }}
-  >
-    <span className="text-white text-xs font-medium">{`${strength * 25}%`}</span>
-  </div>
-</div>
+          {/* Progress Bar */} <div className="w-full bg-gray-200 h-4 rounded mt-2"> 
+
+            <div className={`h-4 ${strength ? "bg-emerald-500" : ""} rounded transition-all flex justify-end items-center px-1`}
+             style={{ width: `${strength * 25||0}%` }} >
+               <span className="text-white text-xs font-medium">{`${strength * 25||0}%`}</span> 
+               </div> </div>
+
             {errors.password && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.password.message}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
             )}
           </div>
 
@@ -206,8 +268,7 @@ const RegisterForm = () => {
                   setSelectRole(role);
                   setValue("role", role);
                 }}
-                className={`py-3 rounded-xl border text-sm 
-                ${
+                className={`py-3 rounded-xl border-2 text-sm ${
                   selectRole === role
                     ? "border-emerald-500 bg-emerald-100 text-emerald-600"
                     : "border-gray-300 text-gray-500"
@@ -222,10 +283,14 @@ const RegisterForm = () => {
             <p className="text-red-500 text-xs">Role is required ❌</p>
           )}
 
-          {/* Button */}
-          <button  disabled={!isValid} 
-          className={`w-full ${!isValid?'bg-gray-300 cursor-not-allowed ':' bg-emerald-500 hover:bg-emerald-600'} text-white py-3 rounded-xl text-sm font-medium flex items-center justify-center`}>
-            Create Account
+          {/* Submit */}
+          <button
+            disabled={!isValid||loading}
+            className={`w-full bg-emerald-500 hover:bg-emerald-600 ${
+              !isValid || loading ? "opacity-50 cursor-not-allowed" : ""
+            } text-white py-3 rounded-xl text-sm font-medium flex items-center justify-center`}
+          >
+            {loading? "Creating Account...":"Create Account"}
             <ArrowRight className="ml-2 w-4 h-4" />
           </button>
         </form>
@@ -234,12 +299,14 @@ const RegisterForm = () => {
 
         <p className="text-center text-xs text-gray-500 mt-4">
           Already have an account?
-          <Link href="/login" className="text-emerald-500 ml-1">
+          <Link href="/Login" className="text-emerald-500 ml-1">
             Sign In
           </Link>
         </p>
-      </div>
+      </motion.div>
     </div>
+    <MessageModal isOpen={isOpen}  onClose={()=>setOpen(false)} title={message.success?'success':'error'} message={message.message} />
+    </>
   );
 };
 

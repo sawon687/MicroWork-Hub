@@ -1,0 +1,6 @@
+{
+  "workbench.settings.useSplitJSON": true,
+  "chat.hookFilesLocations": {
+    "{   \"javascript.preferences.useRequireForImports\": false,   \"typescript.preferences.useRequireForImports\": false,   \"javascript.preferences.importModuleSpecifier\": \"relative\",   \"typescript.preferences.importModuleSpecifier\": \"relative\",   \"javascript.preferences.quoteStyle\": \"single\",   \"typescript.preferences.quoteStyle\": \"single\" }": true
+  }
+}

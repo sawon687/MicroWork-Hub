@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 
 const Banner = () => {
   return (
-    <section className="min-h-screen flex items-center w-full justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white pt-24">
+    <section className="relative min-h-screen flex items-center w-full justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white pt-10">
       <div className=" mx-auto text-center   ">
+  <div className="absolute -top-20 left-0 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full"></div>
+      <div className="absolute bottom-0 right-0 w-72 h-72 bg-cyan-500/20 blur-3xl rounded-full"></div>
 
         {/* Badge */}
         <div className="inline-block mb-6 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">

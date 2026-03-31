@@ -1,7 +1,21 @@
 "use client";
 import Link from "next/link";
+import Button from "../Ui/Button";
+import { usePathname } from "next/navigation";
+import Mullanguage from "../Mullanguage/Mullanguage";
+import { useSession } from 'next-auth/react';
+import { Coins } from 'lucide-react';
+import { useState } from 'react';
+import ProfileDropdown from '../Ui/profileDropdown';
 
 const Navbar = () => {
+    const pathname = usePathname();
+    const {data:session}=useSession()
+    const [showDropdown,setShowDropdown]=useState(false)
+      console.log('session',session?.user?.photo)
+      console.log(typeof session?.user?.photo,'sawon is real', session?.user?.photo)
+  if(pathname ==="/Login" || pathname ==='/Register')return null
+
   return (
     <nav className="fixed w-full z-50 backdrop-blur-lg bg-black/40 border-b border-white/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -21,17 +35,34 @@ const Navbar = () => {
 
         {/* Buttons */}
         <div className="flex items-center gap-4">
-          <Link href={'/Login'}>
-          <button className="text-gray-300 hover:text-white transition">
-            Login
-          </button>
-          </Link>
-         <Link href={'/Register'}
->
-   <button className="bg-emerald-400 hover:bg-emerald-500 text-black px-5 py-2 rounded-full font-semibold transition">
-            Get Started
-          </button>
-  </Link>        </div>
+          <Mullanguage></Mullanguage>
+        {
+          session?.user?(
+            <div className="flex items-center gap-4">
+               <div className='px-5 py-1 rounded-full flex bg-amber-100 text-amber-500'
+               > <Coins></Coins> <span>{session?.user?.coin}</span></div>
+              <img onClick={()=> setShowDropdown(!showDropdown)} src={session?.user?.photo} alt={session?.user?.name} className='w-10 h-10 rounded-full border-2 border-emerald-400' />
+              {
+                showDropdown && <ProfileDropdown user={session?.user}></ProfileDropdown>
+              }
+            </div>
+          ):(
+            <>
+              <Link href={'/Login'}>
+                <button className="text-gray-300 hover:text-white transition">
+                  Login
+                </button>
+              </Link>
+              <Link href={'/Register'}>
+                <Button>
+                  Get Started
+                </Button>
+              </Link>
+            </>
+          )
+        }    
+                    
+                      </div>
       </div>
     </nav>
   );

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 
 import GoogleButton from "@/Components/GoogleButton/GoogleButton";
-
+import { motion } from "framer-motion";
 export default function Login() {
   const router = useRouter();
 
@@ -39,12 +39,17 @@ export default function Login() {
 
     if (error) {
       alert(error.message);
+      
     }
   };
 
   return (
     <div className="min-h-screen flex pt-20 bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
+      <motion.div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8"
+        initial={{opacity:0,y:50}}
+        animate={{opacity:1,y:0}}
+        transition={{duration:1}}
+      >
         
         {/* Header */}
         <div className="text-center mb-8">
@@ -108,14 +113,14 @@ export default function Login() {
         <p className="text-center text-sm text-gray-500 mt-6">
           Don't have an account?{" "}
           <Link
-            href="/register"
+            href="/Register"
             className="text-emerald-500 font-medium hover:underline"
           >
             Register
           </Link>
         </p>
 
-      </div>
+      </motion.div>
     </div>
   );
 }
