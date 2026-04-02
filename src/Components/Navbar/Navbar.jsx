@@ -7,60 +7,73 @@ import { useSession } from 'next-auth/react';
 import { Coins } from 'lucide-react';
 import { useState } from 'react';
 import ProfileDropdown from '../Ui/profileDropdown';
+import { GoBell } from "react-icons/go";
+import NotificationModal from '../NotificationModal/NotificationModal';
+import Logo from '../Ui/Logo';
 
 const Navbar = () => {
     const pathname = usePathname();
     const {data:session}=useSession()
     const [showDropdown,setShowDropdown]=useState(false)
+      const [open, setOpen] = useState(false);
       console.log('session',session?.user?.photo)
       console.log(typeof session?.user?.photo,'sawon is real', session?.user?.photo)
-  if(pathname ==="/Login" || pathname ==='/Register')return null
+  if(pathname ==="/Login" || pathname ==='/Register'|| pathname.startsWith('/dashboard'))return null
 
   return (
     <nav className="fixed w-full z-50 backdrop-blur-lg bg-black/40 border-b border-white/10">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         
         {/* Logo */}
-        <h1 className="text-2xl font-bold text-emerald-400">
-          TaskFlow
-        </h1>
+     <Logo></Logo>
 
         {/* Menu */}
         <div className="hidden md:flex items-center gap-8 text-gray-300">
           <Link href="/" className="hover:text-white transition">Home</Link>
-          <Link href="/features" className="hover:text-white transition">Features</Link>
+          <Link href="/AllTask" className="hover:text-white transition">All Task</Link>
           <Link href="/pricing" className="hover:text-white transition">Pricing</Link>
           <Link href="/about" className="hover:text-white transition">About</Link>
         </div>
 
         {/* Buttons */}
         <div className="flex items-center gap-4">
+          {/* multilanguage button */}
           <Mullanguage></Mullanguage>
-        {
-          session?.user?(
+         
+         
             <div className="flex items-center gap-4">
-               <div className='px-5 py-1 rounded-full flex bg-amber-100 text-amber-500'
-               > <Coins></Coins> <span>{session?.user?.coin}</span></div>
-              <img onClick={()=> setShowDropdown(!showDropdown)} src={session?.user?.photo} alt={session?.user?.name} className='w-10 h-10 rounded-full border-2 border-emerald-400' />
-              {
-                showDropdown && <ProfileDropdown user={session?.user}></ProfileDropdown>
-              }
-            </div>
+
+              { session?.user ? (
+               <>
+                <div className='px-5 py-1 border border-white/10 rounded-xl flex bg-gray-800 text-emerald-500'
+                >
+                  {/* user coins */}
+                   <Coins></Coins> <span>{session?.user?.coin}</span></div>
+            {/* notification */}
+                <button onClick={() => setOpen(true)} className='text-white font-bold'><GoBell size={22} /></button>
+                       <NotificationModal open={open} setOpen={setOpen} />
+            
+                <img onClick={()=> setShowDropdown(!showDropdown)} src={session?.user?.photo} alt={session?.user?.name} className='w-10 h-10 rounded-full border-2 border-emerald-400' />
+                { showDropdown && <ProfileDropdown user={session?.user}></ProfileDropdown> }
+               </>
           ):(
-            <>
+            <>  
+            {/* Login */}
               <Link href={'/Login'}>
                 <button className="text-gray-300 hover:text-white transition">
                   Login
                 </button>
               </Link>
+              {/* Regsiter */}
               <Link href={'/Register'}>
-                <Button>
+                <Button className={'primary'}>
                   Get Started
                 </Button>
               </Link>
             </>
           )
         }    
+         </div>
                     
                       </div>
       </div>

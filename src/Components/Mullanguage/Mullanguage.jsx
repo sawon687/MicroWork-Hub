@@ -24,8 +24,7 @@ const Mullanguage = () => {
         <MdLanguage size={18} />
         <span className="font-semibold text-sm">
           {selectedLanguage.code}
-        </span>
-      </button>
+        </span> </button>
 
       {/* Dropdown */}
       {open && (

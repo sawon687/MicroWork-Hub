@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../Components/Navbar/Navbar";
-import NextAuthPovider from "./provider/NextAuthPovider";
 import Footer from "@/Components/Footer/Footer";
+import NextAuthPovider from '../provider/NextAuthPovider';
 
 
 const geistSans = Geist({
@@ -31,7 +31,9 @@ export default function RootLayout({ children }) {
     
       <body className="min-h-full  flex  flex-col  mx-auto  ">
        <Navbar/>
-          {children}
+         <div className='min-h-screen'>
+           {children}
+         </div>
           <Footer/>
    
       </body>

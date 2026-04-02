@@ -7,7 +7,7 @@ import { FaFacebookF, FaTwitter, FaGithub, FaLinkedinIn } from "react-icons/fa";
 export default function Footer() {
   const pathname = usePathname();
 
-  if(pathname ==="/Login" || pathname === "/Register")return null
+  if(pathname ==="/Login" || pathname === "/Register"|| pathname.startsWith('/dashboard'))return null
   return (
     <footer className="relative bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-gray-300 pt-16 pb-8 px-6 overflow-hidden">
 

@@ -88,7 +88,7 @@ const RegisterForm = () => {
      console.log("🔥 ERROR:", error);
      
   }finally{
-
+       setLoading(false)
   }
   };
 

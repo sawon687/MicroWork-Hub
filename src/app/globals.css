@@ -18,3 +18,8 @@
   @apply bg-gradient-to-r from-emerald-500 to-teal-400
 }
 
+.input-focus{
+  @apply focus:outline-none focus:ring-1 focus:ring-emerald-400
+}
+
+
