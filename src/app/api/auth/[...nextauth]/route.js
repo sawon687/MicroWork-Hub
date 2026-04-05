@@ -50,20 +50,25 @@ export const authOptions = {
     async redirect({ url, baseUrl }) {
       return baseUrl;
     },
-    async session({ session, user, token }) {
-      if (token?.user) {
-        session.user = token.user;
-      }
-      return session;
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-     
-      if (user || account?.provider === "credentials") {
-        token.user = user;
-      }
+ async jwt({ token, user, account }) {
+   if(user)
+   {     
+  
+      token.user=user
+   }
+  
 
-      return token;
-    },
+  return token;
+},
+  async session({ session, token}) {
+        if(token)
+        {
+             session.user=token.user
+        
+        }
+          
+    return session;
+  },
   },
   pages: {
     signIn: "/auth/signin",

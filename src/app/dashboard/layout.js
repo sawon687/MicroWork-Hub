@@ -1,5 +1,5 @@
 "use client";
-import { PanelLeft } from "lucide-react";
+import { Coins, PanelLeft } from "lucide-react";
 import { useState } from "react";
 import Logo from "../../Components/Ui/Logo";
 import {
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import SidarLink from "../../Components/Ui/SidarLink";
+import NextAuthPovider from '../../provider/NextAuthPovider';
 
 // Role ভিত্তিক links
 const workerLinks = [
@@ -20,18 +21,24 @@ const workerLinks = [
   { title: "Available Tasks", url: "/dashboard/tasks", icon: ListTodo },
   { title: "My Submissions", url: "/dashboard/submissions", icon: FileCheck },
   { title: "Withdraw", url: "/dashboard/withdraw", icon: Wallet },
+  { title: "Purchase Coins", url: "/dashboard/purchase-coin", icon:Coins
+   },
 ];
 
 const buyerLinks = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Add Task", url: "/dashboard/add-task", icon: PlusCircle },
-  { title: "My Tasks", url: "/dashboard/my-tasks", icon: FolderOpen },
+  { title: "My Tasks", url: "/dashboard/my-task", icon: FolderOpen },
+  { title: "Purchase Coins", url: "/dashboard/purchase-coin", icon:Coins
+   },
 ];
 
 const adminLinks = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Manage Users", url: "/dashboard/manage-users", icon: Users },
   { title: "All Tasks", url: "/dashboard/tasks", icon: ListTodo },
+    { title: "Purchase Coins", url: "/dashboard/purchase-coin", icon:Coins
+   },
 ];
 
 // role অনুযায়ী links select
@@ -45,12 +52,17 @@ const DashboardLayout = ({children}) => {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const {navItem,setNavItem}=useState();
-
-  const role = session?.user?.role;
+console.log('session layout',session)
+  const role = session?.user?.role
+  console.log('session role',role)
   const links = getLinks(role);
 
   return (
-    <div>
+    <>
+    <NextAuthPovider>
+
+
+      <div>
       {/* Sidebar */}
       <div
         className={`bg-gradient-to-r from-[#0f172a] to-[#1e293b] 
@@ -98,16 +110,23 @@ const DashboardLayout = ({children}) => {
         </button>
 
         <h1 className="font-semibold">Navbar Title</h1>
+         <div className='px-5 py-1 border border-white/10 rounded-xl flex bg-gray-800 text-emerald-500'
+                >
+                  {/* user coins */}
+                   <Coins></Coins> <span>{session?.user?.coin}</span></div>
+        
       </div>
 
       {/* Main Content */}
       <div
-        className={`transition-all bg-gray-100 min-h-screen p-20  duration-300 
+        className={`transition-all bg-gray-100 min-h-screen pt-16   duration-300 
         ${open ? "ml-64" : "ml-14"}`}
       >
         {children}
       </div>
     </div>
+    </NextAuthPovider>
+    </>
   );
 };
 

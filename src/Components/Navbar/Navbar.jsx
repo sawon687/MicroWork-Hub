@@ -14,6 +14,7 @@ import Logo from '../Ui/Logo';
 const Navbar = () => {
     const pathname = usePathname();
     const {data:session}=useSession()
+    console.log(session)
     const [showDropdown,setShowDropdown]=useState(false)
       const [open, setOpen] = useState(false);
       console.log('session',session?.user?.photo)
@@ -22,7 +23,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed w-full z-50 backdrop-blur-lg bg-black/40 border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className=" mx-auto px-20 py-4 flex items-center justify-between">
         
         {/* Logo */}
      <Logo></Logo>
@@ -30,7 +31,7 @@ const Navbar = () => {
         {/* Menu */}
         <div className="hidden md:flex items-center gap-8 text-gray-300">
           <Link href="/" className="hover:text-white transition">Home</Link>
-          <Link href="/AllTask" className="hover:text-white transition">All Task</Link>
+          <Link href="/all-task" className="hover:text-white transition">All Task</Link>
           <Link href="/pricing" className="hover:text-white transition">Pricing</Link>
           <Link href="/about" className="hover:text-white transition">About</Link>
         </div>
@@ -49,6 +50,8 @@ const Navbar = () => {
                 >
                   {/* user coins */}
                    <Coins></Coins> <span>{session?.user?.coin}</span></div>
+
+                   
             {/* notification */}
                 <button onClick={() => setOpen(true)} className='text-white font-bold'><GoBell size={22} /></button>
                        <NotificationModal open={open} setOpen={setOpen} />

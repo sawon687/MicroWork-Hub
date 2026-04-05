@@ -1,79 +1,92 @@
 "use client";
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle, AlertCircle } from "lucide-react";
+import { X, CheckCircle, AlertCircle, Coins } from "lucide-react";
 
 const MessageModal = ({
   isOpen,
   onClose,
   message,
-  type = "error", // success | error
-  duration = 3000,
+  type = "error", // success | error | coin
+  duration = 8000,
 }) => {
-
-  // ⏱ auto close
   useEffect(() => {
     if (!isOpen) return;
-    const timer = setTimeout(() => {
-      onClose();
-    }, duration);
-
+    const timer = setTimeout(onClose, duration);
     return () => clearTimeout(timer);
   }, [isOpen, duration, onClose]);
 
-  const isSuccess = type === "success";
+  const getStyle = () => {
+    if (type === "success")
+      return {
+        icon: <CheckCircle className="w-14 h-14 text-white" />,
+        bg: "from-emerald-400 to-emerald-600",
+        btn: "bg-emerald-500 hover:bg-emerald-600",
+        title: "Success 🎉",
+      };
+    if (type === "coin")
+      return {
+        icon: <Coins className="w-14 h-14 text-white" />,
+        bg: "from-yellow-400 to-amber-500",
+        btn: "bg-amber-500 hover:bg-amber-600",
+        title: "Coins Updated 💰",
+      };
+    return {
+      icon: <AlertCircle className="w-14 h-14 text-white" />,
+      bg: "from-red-400 to-red-600",
+      btn: "bg-red-500 hover:bg-red-600",
+      title: "Something went wrong ❌",
+    };
+  };
+
+  const style = getStyle();
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <motion.div
-            initial={{ scale: 0.7, y: 50, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            exit={{ scale: 0.7, y: 50, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="bg-white rounded-2xl shadow-2xl w-[90%] max-w-sm p-6 text-center relative"
+            initial={{ scale: 0.6, opacity: 0, y: 80 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.6, opacity: 0, y: 80 }}
+            transition={{ type: "spring", stiffness: 120 }}
+            className="relative w-[90%] max-w-sm rounded-3xl bg-white shadow-2xl overflow-hidden"
           >
+            {/* Top Gradient Section */}
+            <div
+              className={`bg-gradient-to-r ${style.bg} p-6 flex justify-center`}
+            >
+              {style.icon}
+            </div>
+
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+              className="absolute top-3 right-3 text-white/80 hover:text-white"
             >
-              <X size={18} />
+              <X size={20} />
             </button>
 
-            {/* Icon */}
-            <div className="flex justify-center mb-4">
-              {isSuccess ? (
-                <CheckCircle className="text-green-500 w-12 h-12" />
-              ) : (
-                <AlertCircle className="text-red-500 w-12 h-12" />
-              )}
+            {/* Content */}
+            <div className="p-6 text-center">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                {style.title}
+              </h2>
+
+              <p className="text-gray-600 text-sm mb-5">{message}</p>
+
+              <button
+                onClick={onClose}
+                className={`w-full py-2.5 rounded-xl text-white font-semibold transition-all duration-200 ${style.btn} active:scale-95`}
+              >
+                Got it 👍
+              </button>
             </div>
-
-            {/* Message */}
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">
-              {isSuccess ? "Success" : "Error"}
-            </h2>
-
-            <p className="text-gray-600 text-sm">{message}</p>
-
-            {/* Button */}
-            <button
-              onClick={onClose}
-              className={`mt-5 w-full py-2 rounded-xl text-white font-medium ${
-                isSuccess
-                  ? "bg-green-500 hover:bg-green-600"
-                  : "bg-red-500 hover:bg-red-600"
-              }`}
-            >
-              OK
-            </button>
           </motion.div>
         </motion.div>
       )}

@@ -1,16 +1,21 @@
-import connect from "../../../../lib/dbconnect";
+import { stringify } from 'postcss';
+import connect from '../../../lib/dbconnect';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
+
+const taskColl =  connect("TaskCollection");
+    const userColl = connect("userCOllection");
 
 export async function POST(req, res) {
   try {
     // 1️ Connect to collections
-    const taskColl = await connect("TaskCollection");
-    const userColl = await connect("userCollection");
+    
 
     // 2️ Get body
     const body = await req.json();
-    const { totalCost, email } = body; // make sure frontend sends email
+    const { totalCost, createdEmail } = body; // make sure frontend sends email
 
-    if (!email || !totalPayableAmount) {
+    if (!createdEmail || !totalCost) {
       return new Response(
         JSON.stringify({ message: "Invalid data", success: false }),
         { status: 400 }
@@ -18,7 +23,8 @@ export async function POST(req, res) {
     }
 
     // 3️ Find user
-    const user = await userColl.findOne({ email });
+    const user = await userColl.findOne({ email:createdEmail });
+    console.log('user',user)
     if (!user) {
       return new Response(
         JSON.stringify({ message: "User not found", success: false }),
@@ -43,17 +49,18 @@ export async function POST(req, res) {
     // 6️ Transaction: deduct coin & insert task
     const result = await Promise.all([
       userColl.updateOne(
-        { email },
-        { $inc: { coin: -totalPayableAmount } }
+        { email:createdEmail },
+        { $inc: { coin: -totalCost } }
       ),
       taskColl.insertOne(body),
     ]);
 
     return new Response(
       JSON.stringify({
-        message: "Task saved successfully",
+        message: "Task created successfully!",
         success: true,
         data: result,
+      
       }),
       { status: 200 }
     );
@@ -65,3 +72,29 @@ export async function POST(req, res) {
     );
   }
 }
+
+
+// export async function GET(req,res){
+//   try {
+//     const session= await getServerSession(authOptions)
+//  const cretedId=session?.user?._id
+// cons
+//   let result;
+//   if(cretedId)
+//   {
+//      result= await taskColl.find({createdId:cretedId}).toArray()
+
+//   }
+
+//   result =await taskColl.find().toArray()
+
+//     return new Response(JSON.stringify({message:'user data found',success:true, data:result}))
+//   } catch (error) {
+//     console.log('task eror',error)
+//          return new Response(
+//       JSON.stringify({ message: "Something went wrong", success: false }),
+//       { status: 500 }
+//     );
+//   }
+
+// }
