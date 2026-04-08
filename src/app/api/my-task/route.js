@@ -3,7 +3,6 @@ import connect from "../../../lib/dbconnect";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 const taskColl = connect("TaskCollection");
-
 export async function GET(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -15,21 +14,21 @@ export async function GET(req) {
     }
 
     const createdId = session?.user?._id;
-    const user=session?.user;
     const role=session?.user?.role;
-    console.log('role my task',user)
-     console.log('role my task',user.role)
-     console.log('role my task',role)
-     console.log('role my id',createdId)
+         console.log('seession id',createdId)
 
-    if (session.user?.role !== "Buyer") {
+    if ( role !== "Buyer") {
       return Response.json(
         { message: "Unauthorized access (Buyer only)", success: false },
         { status: 401 }
       );
     }
 
-    const result = await taskColl.find({ createdId }).toArray();
+   
+    const result=   await taskColl.find({ createdId }).toArray();
+      
+
+    console.log('result',result)
 
     return Response.json(
       { message: "Data is found", success: true, data:result },

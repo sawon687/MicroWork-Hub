@@ -14,7 +14,7 @@ export async function POST(req, res) {
     // 2️ Get body
     const body = await req.json();
     const { totalCost, createdEmail } = body; // make sure frontend sends email
-
+     body.status='active'
     if (!createdEmail || !totalCost) {
       return new Response(
         JSON.stringify({ message: "Invalid data", success: false }),
@@ -47,7 +47,7 @@ export async function POST(req, res) {
     body.createdAt = new Date().toISOString();
 
     // 6️ Transaction: deduct coin & insert task
-    const result = await Promise.all([
+    const [userResult,taskResult] = await Promise.all([
       userColl.updateOne(
         { email:createdEmail },
         { $inc: { coin: -totalCost } }
@@ -59,7 +59,7 @@ export async function POST(req, res) {
       JSON.stringify({
         message: "Task created successfully!",
         success: true,
-        data: result,
+        data:taskResult,
       
       }),
       { status: 200 }
@@ -74,27 +74,3 @@ export async function POST(req, res) {
 }
 
 
-// export async function GET(req,res){
-//   try {
-//     const session= await getServerSession(authOptions)
-//  const cretedId=session?.user?._id
-// cons
-//   let result;
-//   if(cretedId)
-//   {
-//      result= await taskColl.find({createdId:cretedId}).toArray()
-
-//   }
-
-//   result =await taskColl.find().toArray()
-
-//     return new Response(JSON.stringify({message:'user data found',success:true, data:result}))
-//   } catch (error) {
-//     console.log('task eror',error)
-//          return new Response(
-//       JSON.stringify({ message: "Something went wrong", success: false }),
-//       { status: 500 }
-//     );
-//   }
-
-// }

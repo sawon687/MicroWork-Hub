@@ -2,16 +2,17 @@
 import { Clock, Coins, Users } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import ApplyFormModal from '../Ui/ApplyFormModal'
 
-const TaskCard = ({ task, i, applyingId, handleApply }) => {
-  // যদি ডাটা না থাকে তবে কিছুই দেখাবে না
+const TaskCard = ({ task }) => {
+
   if (!task) return null;
   console.log('task Task card',task)
 
   return (
     <div 
-      className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-500 group"
-      // এখানে Framer Motion ছাড়া এনিমেশন দিতে হলে নিচের স্টাইলটি প্রয়োজন
+      className="bg-white w-full rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-500 group"
+    
     
     >
 
@@ -59,22 +60,12 @@ const TaskCard = ({ task, i, applyingId, handleApply }) => {
         {/* Buttons */}
         <div className="flex gap-2">
           <Link href={`/all-task/${task._id}`} className="flex-1">
-            <button className="w-full py-2 text-sm font-semibold rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">
+            <button className="w-full  cursor-pointer hover:bg-orange-400 py-2 text-sm font-semibold rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">
               Details
             </button>
           </Link>
           
-          <button 
-            disabled={applyingId === task._id} 
-            onClick={() => handleApply(task._id)}
-            className={`flex-1 py-2 text-sm font-semibold rounded-xl text-white transition-all 
-              ${applyingId === task._id 
-                ? "bg-slate-300 cursor-not-allowed" 
-                : "bg-gradient-to-r to-teal-400 from-emerald-400 hover:bg-blue-700 active:scale-95"
-              }`}
-          >
-            {applyingId === task._id ? "Applying..." : "Apply Now"}
-          </button>
+        <ApplyFormModal taskId={task?._id} task_coin={task?.payable_amount} taskTitle={task.task_title}></ApplyFormModal>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "../Components/Navbar/Navbar";
 import Footer from "@/Components/Footer/Footer";
 import NextAuthPovider from '../provider/NextAuthPovider';
+import UseQueryProvider from '../provider/UseQueryProvider';
 
 
 const geistSans = Geist({
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <>
    <NextAuthPovider>
+    <UseQueryProvider>
      <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
@@ -38,6 +40,7 @@ export default function RootLayout({ children }) {
    
       </body>
     </html>
+    </UseQueryProvider>
    </NextAuthPovider>
    </>
   );

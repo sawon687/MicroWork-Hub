@@ -1,16 +1,42 @@
+'use client'
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   FaEdit, FaEye, FaUsers, FaCalendarAlt, 
   FaClock, FaTrashAlt, FaYoutube, FaPlus 
 } from 'react-icons/fa';
+import MessageModal from '../Ui/MessageModal';
 
-const MyTaskCard = ({ task }) => {
+const MyTaskCard = ({ task, refetch }) => {
+        
   // Database checking and dynamic calculations
-  const totalCost = task.payable_amount * task.required_workers;
-  const completedWorkers = task.completed_workers || 0; // Jodi backend theke completed_workers field thake
-  const submissionRate = (completedWorkers / task.required_workers) * 100;
-
+   const [isOpen,setIsOpen]=useState(false)
+      const [message,setMessage]=useState('')
+       const [modalType,setModalType]=useState('')
+  const completedWorkers = task?.completed_workers || 0; // Jodi backend theke completed_workers field thake
+  console.log('completed worker',task?.completed_workers)
+  const submissionRate = (completedWorkers / task?.required_workers) * 100;
+  console.log('totalcost',task?.total_cost)
+const handleDeleted=async(id)=>{
+    try { 
+           console.log('id is id',id)
+       const result=await(await fetch(`/api/my-task/${id}`,{
+        method:'DELETE'
+       })).json()
+     if(result.success)
+     {
+                 setIsOpen(true)
+                 setMessage(result.message)
+                 setModalType('success')
+                  refetch()
+     }
+    } catch (error) {
+      
+                     setIsOpen(true)
+                 setMessage(error?.message)
+                 setModalType('error')
+    }
+}
   return (
     <div className="bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-emerald-200 transition-all duration-500 group mb-6">
       <div className="flex flex-col lg:flex-row">
@@ -66,7 +92,7 @@ const MyTaskCard = ({ task }) => {
             
             <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
               <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Total Budget</span>
-              <span className="text-2xl font-black text-emerald-500">${totalCost}</span>
+              <span className="text-2xl font-black text-emerald-500">${task?.total_cost}</span>
             </div>
 
             <div className="flex justify-between items-center px-4">
@@ -77,7 +103,7 @@ const MyTaskCard = ({ task }) => {
 
           {/* Action Buttons - Emerald Theme */}
           <div className="flex flex-col gap-3">
-            <Link href={`/dashboard/my-task/submission-task`} className="flex items-center justify-center gap-3 bg-slate-900 hover:bg-emerald-500 text-white text-xs font-black py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-emerald-200 active:scale-95 tracking-widest uppercase">
+            <Link href={`/dashboard/my-task/${task._id}`} className="flex items-center justify-center gap-3 bg-slate-900 hover:bg-emerald-500 text-white text-xs font-black py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-emerald-200 active:scale-95 tracking-widest uppercase">
               <FaEye size={16} /> View Submissions
             </Link>
             
@@ -85,7 +111,7 @@ const MyTaskCard = ({ task }) => {
               <button className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-slate-200 hover:border-emerald-400 hover:text-emerald-500 text-slate-700 text-xs font-black py-4 rounded-2xl transition-all duration-300">
                 <FaEdit /> EDIT
               </button>
-              <button className="px-6 flex items-center justify-center bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white rounded-2xl transition-all duration-300 shadow-sm border border-rose-100">
+              <button onClick={()=> handleDeleted(task._id)} className="px-6 flex items-center justify-center bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white rounded-2xl transition-all duration-300 shadow-sm border border-rose-100">
                 <FaTrashAlt />
               </button>
             </div>
@@ -97,6 +123,7 @@ const MyTaskCard = ({ task }) => {
         </div>
         
       </div>
+       <MessageModal isOpen={isOpen} onClose={() => setIsOpen(false)} message={message} type={modalType} />
     </div>
   );
 };

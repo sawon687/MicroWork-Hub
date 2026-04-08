@@ -4,66 +4,60 @@ import CategoryButton from '../../Components/CategoryButtonandSort/CategoryButto
 import SortButton from '../../Components/CategoryButtonandSort/SortButton'
 import TaskCard from '../../Components/TaskCard/TaskCard'
 import PagenationButton from '../../Components/Ui/PagenationButton'
-const getTaskData=async(limit,page)=>{
-   const result=await (await fetch(`http://localhost:3000/api/all-task?limit=${limit}&page=${page}`)).json()
-   
 
-   return result.data
+const getTaskData = async (limit, page) => {
+  // Added default values to prevent fetch errors if params are missing
+  const result = await (await fetch(`http://localhost:3000/api/all-task?limit=${limit || 6}&page=${page || 1}`)).json()
+  return result.data
 }
-const page =async ({searchParams}) => {
-const params=await searchParams
-console.log('searchPrams',params)
-const data=await getTaskData(params.limit,params.page)
-const taskdata=data?.result;
-const pageNumber=data?.pageNumber;
 
-  console.log('data is ', taskdata)
+const page = async ({ searchParams }) => {
+  const params = await searchParams
+  const data = await getTaskData(params.limit, params.page)
+  const taskdata = data?.result;
+  const pageNumber = data?.pageNumber;
+
   return (
-    <div className='flex flex-col justify-center '>
-     <div className="bg-gradient-to-r   from-[#0f172a] to-[#1e293b]  py-25   text-white  ">
+    // Added w-full and items-center to ensure the container stays consistent
+    <div className='flex flex-col w-full  items-center'>
       
-     <div className=' px-20'>
-       {/* Title */}
-      <h1 className="text-3xl text-gray-100 md:text-5xl font-bold mb-2">All Tasks</h1>
-      <p className="text-gray-300 mb-6">
-        Browse and apply for micro tasks to start earning
-      </p>
+      {/* Header Section - Kept same as your design */}
+      <div className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] pb-20 pt-30 max-w-[1600px] w-full text-white">
+        <div className='w-full px-10 md:px-20'>
+          <h1 className="text-3xl text-gray-100 md:text-5xl font-bold mb-2">All Tasks</h1>
+          <p className="text-gray-300 mb-6">
+            Browse and apply for micro tasks to start earning
+          </p>
 
-      {/* Search + Filters */}
-      <div className="flex flex-wrap items-center w-full gap-4  mx-auto">
-        
-        {/* Search */}
-        <div className="relative w-full md:w-[420px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            className="w-full bg-gray-800/60 border border-gray-600 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-emerald-500"
-          />
+          <div className="flex flex-wrap items-center w-full gap-4">
+            <div className="relative w-full md:w-[420px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                className="w-full bg-gray-800/60 border border-gray-600 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-emerald-500"
+              />
+            </div>
+            <CategoryButton />
+          </div>
+          <SortButton />
         </div>
-
-        {/* Category Buttons */}
-        <CategoryButton></CategoryButton>
-     </div>
-     {/* Sort */}
-      <SortButton></SortButton>
       </div>
 
-      
-    </div>
-
-
-     
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 px-20 mx-auto'>
-  {taskdata?.map((task) => (
-    <TaskCard key={task._id} task={task} />
-  ))}
- 
-
+      {/* Main Content Area - Fixed width container to prevent layout shifts */}
+      <div className='max-w-[1600px] w-full px-10 md:px-20'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 w-full'>
+          {taskdata?.map((task) => (
+            <TaskCard key={task?._id} task={task} />
+          ))}
         </div>
-          <div>
-        <PagenationButton pageNumber={pageNumber}></PagenationButton>
-       </div>
+
+        {/* Pagination Section */}
+        <div className='flex justify-center pb-10'>
+          <PagenationButton pageNumber={pageNumber} />
+        </div>
+      </div>
+
     </div>
   )
 }

@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 
 const ProfileDropdown = ({ user }) => {
   return (
-    <div className="absolute top-20 right-5 mt-3 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+    <div className="fixed top-20 z-50 right-5 mt-3 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
       
       {/* User Info */}
       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800">

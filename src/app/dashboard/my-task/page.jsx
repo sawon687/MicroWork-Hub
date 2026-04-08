@@ -1,25 +1,21 @@
+'use client'
 import React from 'react'
 import MytaskCard from '../../../Components/MytaskCard/MytaskCard'
 import { FaPlus, FaRocket, FaListUl } from 'react-icons/fa';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 
-const getMyTask=async()=>{
-     const cookieStore=await cookies()
-       const result= await( await fetch(`http://localhost:3000/api/my-task/`,{
-    headers: {
-      Cookie:(await cookieStore).toString(),
-    },
-   
-  })).json()
-         console.log('data',result)
-         console.log('data',result.data)
-       return result.data;
-       
-}
+import { useQuery } from '@tanstack/react-query';
 
-const Page = async () => {
-  const myTasks = await getMyTask();
+const page =() => {
+
+
+  const {data:myTasks=[],refetch}=useQuery({
+    queryKey:['my-task'],
+    queryFn:async()=>{
+       const result=await( (await fetch(`http://localhost:3000/api/my-task`))).json()
+
+       return result.data}
+})
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-20">
@@ -29,7 +25,7 @@ const Page = async () => {
       <div className="max-w-7xl mx-auto px-4 md:px-10 pt-12">
         
         {/* Page Header: Modern & Compact */}
-        <div className="relative mb-12 overflow-hidden bg-slate-900 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200">
+        <div className="relative mb-12 overflow-hidden bg-slate-900 rounded-xl p-8 md:p-12 shadow-2xl shadow-slate-200">
           {/* Decorative Circles */}
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-400/20 rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-400/10 rounded-full blur-3xl" />
@@ -63,9 +59,9 @@ const Page = async () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Tasks</p>
-            <p className="text-2xl font-black text-slate-800">{myTasks.length}</p>
+            <p className="text-2xl font-black text-slate-800">{myTasks?.length}</p>
           </div>
-          {/* আরো স্ট্যাট কার্ড যোগ করতে পারেন এখানে */}
+         
         </div>
 
         {/* Task List Grid */}
@@ -81,7 +77,7 @@ const Page = async () => {
           {myTasks && myTasks.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
               {myTasks.map((task) => (
-                <MytaskCard task={task} key={task._id} />
+                <MytaskCard task={task} refetch={refetch} key={task._id} />
               ))}
             </div>
           ) : (
@@ -94,7 +90,7 @@ const Page = async () => {
               <p className="text-slate-500 mb-8 text-center max-w-xs">
                 You haven't posted any tasks yet. Start by creating your first campaign!
               </p>
-              <Link href="/dashboard/create-task" className="text-emerald-500 font-bold hover:underline">
+              <Link href="/dashboard/add-task" className="text-emerald-500 font-bold hover:underline">
                 Create Task Now →
               </Link>
             </div>
@@ -105,4 +101,4 @@ const Page = async () => {
   )
 }
 
-export default Page;
+export default page;

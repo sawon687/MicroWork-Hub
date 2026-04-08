@@ -5,35 +5,40 @@ const taskColl = connect("TaskCollection");
 
 export async function GET(req) {
   try {
-    const {searchParams}=new URL(req.url)
-    const page=parseInt(searchParams.get('page'))
-      const limit=parseInt(searchParams.get('limit'))
+    const { searchParams } = new URL(req.url)
 
-      const skip=limit *(page-1)
-  
-    const result = await taskColl.find().skip(skip).limit(limit).toArray();
-  const totalTask= await   taskColl.countDocuments()
+    const page = parseInt(searchParams.get('page')) || 1
+    const limit = parseInt(searchParams.get('limit')) || 9
+    const search = searchParams.get('search') || ''
 
-const totalPage=totalTask/limit
-const pageNumber=Math.ceil(totalPage)
-    return new Response(
-      JSON.stringify({
-        message: "Data found",
-        success: true,
-        data: {result,pageNumber}
-      }),
-      { status: 200 } // ✅ fix
-    );
+    const skip = limit * (page - 1)
+
+    let query = {}
+
+    if (search) {
+      query = {
+        $or: [
+          { task_title: { $regex: search, $options: "i" } },
+          { task_detail: { $regex: search, $options: "i" } }
+        ]
+      }
+    }
+
+    const result = await taskColl
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .toArray()
+
+    const totalTask = await taskColl.countDocuments(query)
+    const pageNumber = Math.ceil(totalTask / limit)
+
+    return Response.json({
+      success: true,
+      data: { result, pageNumber }
+    })
 
   } catch (error) {
-    console.log('error', error);
-
-    return new Response(
-      JSON.stringify({
-        message: "Something went wrong",
-        success: false
-      }),
-      { status: 500 }
-    );
+    return Response.json({ success: false }, { status: 500 })
   }
 }

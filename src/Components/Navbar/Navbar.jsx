@@ -7,23 +7,22 @@ import { useSession } from 'next-auth/react';
 import { Coins } from 'lucide-react';
 import { useState } from 'react';
 import ProfileDropdown from '../Ui/profileDropdown';
-import { GoBell } from "react-icons/go";
+
 import NotificationModal from '../NotificationModal/NotificationModal';
 import Logo from '../Ui/Logo';
+import SearchModal from '../Ui/SearchModal';
 
 const Navbar = () => {
     const pathname = usePathname();
     const {data:session}=useSession()
-    console.log(session)
+  
     const [showDropdown,setShowDropdown]=useState(false)
-      const [open, setOpen] = useState(false);
-      console.log('session',session?.user?.photo)
-      console.log(typeof session?.user?.photo,'sawon is real', session?.user?.photo)
+  
   if(pathname ==="/Login" || pathname ==='/Register'|| pathname.startsWith('/dashboard'))return null
 
   return (
-    <nav className="fixed w-full z-50 backdrop-blur-lg bg-black/40 border-b border-white/10">
-      <div className=" mx-auto px-20 py-4 flex items-center justify-between">
+    <nav className="fixed z-50 w-full backdrop-blur-lg bg-black/40 border-b border-white/10">
+      <div className=" mx-auto  px-20 py-4 flex items-center justify-between">
         
         {/* Logo */}
      <Logo></Logo>
@@ -34,6 +33,7 @@ const Navbar = () => {
           <Link href="/all-task" className="hover:text-white transition">All Task</Link>
           <Link href="/pricing" className="hover:text-white transition">Pricing</Link>
           <Link href="/about" className="hover:text-white transition">About</Link>
+          <SearchModal></SearchModal>
         </div>
 
         {/* Buttons */}
@@ -53,8 +53,7 @@ const Navbar = () => {
 
                    
             {/* notification */}
-                <button onClick={() => setOpen(true)} className='text-white font-bold'><GoBell size={22} /></button>
-                       <NotificationModal open={open} setOpen={setOpen} />
+                 <NotificationModal Navbar={'Navbar'}></NotificationModal>
             
                 <img onClick={()=> setShowDropdown(!showDropdown)} src={session?.user?.photo} alt={session?.user?.name} className='w-10 h-10 rounded-full border-2 border-emerald-400' />
                 { showDropdown && <ProfileDropdown user={session?.user}></ProfileDropdown> }
@@ -77,9 +76,10 @@ const Navbar = () => {
           )
         }    
          </div>
-                    
-                      </div>
+                    </div>
+
       </div>
+
     </nav>
   );
 };

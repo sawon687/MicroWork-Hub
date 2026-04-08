@@ -41,13 +41,15 @@ const AddTaskForm = () => {
       setLoading(true);
           console.log('session',session)
 
+       
+
       //  total cost
-      data.totalCost =
+      data.total_cost =
         Number(data.required_workers) * Number(data.payable_amount);
 
       data.createdEmail = session?.user?.email;
       data.createdId = session.user?._id;
-        data.completed_workers=null
+        data.completed_workers=0
       //  image upload
       const photo = data?.task_image
 ;
@@ -182,8 +184,10 @@ const AddTaskForm = () => {
             </div>
           </div>
 
-          {/* Category */}
-          <div>
+          <div className='grid grid-cols-2 gap-4'>
+
+            {/* Category */}
+          <div className=''>
             <label className="text-sm text-gray-600">Category</label>
             <select
               {...register("category", { required: true })}
@@ -196,6 +200,18 @@ const AddTaskForm = () => {
               <option value="survey">Survey</option>
             </select>
           </div>
+           {/* submission requrment */}
+            <div>
+              <label className="text-sm text-gray-600">Submission Requrment</label>
+              <input
+                type="text"
+                placeholder="10"
+                {...register("submission_requirement", { required: true })}
+                className="w-full mt-1 px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
+              />
+            </div>
+          </div>
+           
 
           {/* Image */}
           <div>
