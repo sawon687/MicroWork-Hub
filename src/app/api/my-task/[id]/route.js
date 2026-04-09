@@ -43,7 +43,7 @@ export async function PUT(req, { params }) {
   try {
     const body = await req.json();
     const { id } = await params;
-    const { status, userEmail, taskCoin, buyerName } = body;
+    const { status, buyerEmail, taskCoin, buyerName } = body;
 
     const existingTask = await subColl.findOne({ _id: new ObjectId(id) });
     
@@ -84,7 +84,8 @@ export async function PUT(req, { params }) {
         message: status === 'approved' 
           ? `You have earned $${earnedDollar} from ${buyerName} for completing ${taskTitle}`
           : `Your submission for "${taskTitle}" was rejected by ${buyerName}`,
-        toEmail: userEmail,
+        toEmail: existingTask.userEmail,
+        fromEmail:buyerEmail,
         actionRoute: "/dashboard/worker-home",
         time: new Date(),
       };

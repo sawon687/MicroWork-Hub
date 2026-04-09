@@ -71,7 +71,10 @@ const AddTaskForm = () => {
       }
 
       data.task_image = imgData.data.display_url;
+         
+     
 
+      console.log('data is image',data)
       //  backend call
       const res = await fetch("/api/add-task", {
         method: "POST",

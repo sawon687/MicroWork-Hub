@@ -13,15 +13,13 @@ const TaskCard = ({ task }) => {
     <div 
       className="bg-white w-full rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-500 group"
     
-    
     >
 
-    
       {/* Image Section */}
       <div className="h-40 overflow-hidden bg-slate-100">
         <img 
           src={task.task_image || 'https://via.placeholder.com/400x300'} 
-          alt={task.task_title} 
+          alt={task?.task_title} 
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
         />
       </div>
@@ -32,7 +30,7 @@ const TaskCard = ({ task }) => {
           <span className={`text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wider ${
             task.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
           }`}>
-            {task.status || 'unknown'}
+            {task?.status || 'unknown'}
           </span>
           <div className="flex items-center gap-1 text-blue-600 font-bold">
             <Coins className="w-4 h-4" /> {task.payable_amount}
@@ -41,10 +39,10 @@ const TaskCard = ({ task }) => {
 
         {/* Title and Description */}
         <h3 className="text-lg font-bold text-slate-800 mb-2 line-clamp-2">
-          {task.task_title}
+          {task?.task_title}
         </h3>
         <p className="text-sm text-slate-500 mb-4 line-clamp-2 leading-relaxed">
-          {task.task_detail}
+          {task?.task_detail}
         </p>
 
         {/* Metadata */}
@@ -65,7 +63,7 @@ const TaskCard = ({ task }) => {
             </button>
           </Link>
           
-        <ApplyFormModal taskId={task?._id} task_coin={task?.payable_amount} taskTitle={task.task_title}></ApplyFormModal>
+        <ApplyFormModal  taskId={task?._id} taskTitle={task?.task_title} ></ApplyFormModal>
         </div>
       </div>
     </div>

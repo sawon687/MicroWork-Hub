@@ -6,14 +6,14 @@ import AnimatedTitle from '../../../Components/Ui/AnimatedTitle';
 import ApplyFormModal from '../../../Components/Ui/ApplyFormModal';
 const getTaskItem=async(id)=>{
    const result=await (await fetch(`http://localhost:3000/api/all-task/${id}`)).json()
-      console.log('task de',result.data)
+    
    return result.data
 }
 const page = async({params}) => {
 const {id}=await params
-console.log('id task details',id)
+
 const task=await getTaskItem(id) || {}
-console.log('task details',task)
+
   return (
    
     <div className="min-h-screen relative z-10 bg-[#0a0a0a] text-white font-sans">

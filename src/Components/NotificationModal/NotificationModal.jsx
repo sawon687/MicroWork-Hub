@@ -99,7 +99,10 @@ const NotificationModal = ({ Navbar }) => {
                              {new Date(item.time).toLocaleString([], { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' })}
                            </span>
                            {/* Action Button on Click */}
-                           <Link href={'/notifications'} className="bg-emerald-500/10 text-emerald-500 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 flex items-center gap-1 text-[10px] font-bold">
+                           <Link href={'/notifications'} onClick={(e) => {
+                          e.stopPropagation(); // this prevents the parent div's onClick from firing
+                             setOpen(false);      // close the modal
+                        }} className="bg-emerald-500/10 text-emerald-500 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 flex items-center gap-1 text-[10px] font-bold">
                              View details <ArrowRight size={12} />
                            </Link>
                         </div>

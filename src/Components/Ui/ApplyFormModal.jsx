@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import MessageModal from './MessageModal'
 
-const ApplyFormModal = ({ taskId, task_coin, taskTitle = "Translate English Article to Bangla" }) => {
+const ApplyFormModal = ({ taskId ,taskTitle}) => {
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [mounted, setMounted] = useState(false) 
     const [preview, setPreview] = useState(null)
@@ -49,13 +49,10 @@ const ApplyFormModal = ({ taskId, task_coin, taskTitle = "Translate English Arti
                     data.task_driveLink=null
                   }
              
-       
-            
+    
             const submissionData = {
                 ...data,
                 taskID:taskId,
-                taskTitle,
-                task_coin,
                 userName: session?.user?.name,
                 userEmail: session?.user?.email, 
                 userPhoto: session?.user?.photo, 
@@ -113,7 +110,7 @@ const ApplyFormModal = ({ taskId, task_coin, taskTitle = "Translate English Arti
 
     return (
         <>
-            {/* ওপেনিং বাটনসমূহ */}
+            
             {apply ? (
                 <button onClick={() => setIsOpenModal(true)} className="flex-1 text-white cursor-pointer rounded-xl py-2 px-4 bg-gradient-to-r to-teal-400 from-emerald-400 hover:opacity-90 active:scale-95 transition-all">
                     Apply
@@ -124,7 +121,7 @@ const ApplyFormModal = ({ taskId, task_coin, taskTitle = "Translate English Arti
                 </button>
             ) : null}
 
-            {/* পোর্টাল মোডাল */}
+            
             {isOpenModal && mounted && createPortal(
                 <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                   

@@ -15,6 +15,10 @@ export async function GET(req, { params }) {
   console.log('query data id',query)
     const result = (await mysubmission.find(query).sort({createdAt:'-1'}).toArray())
 
+
+        
+
+
   console.log('reulst ',result)
     return new Response(JSON.stringify( { 
         message:'data fonted',

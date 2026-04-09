@@ -4,28 +4,47 @@ import { authOptions } from '../auth/[...nextauth]/route';
 import { ObjectId } from 'mongodb';
 const subColl= connect('SubmissionColl')
 const taskColl = connect("TaskCollection");
+const notificationColl=connect('notificationCollection')
 
 
 export async function POST(req) {
   try {
     const body = await req.json();
-      console.log('body',body)
+    const taskId = new ObjectId(body.taskID);
+
+    const exitTask=await taskColl.findOne({_id:taskId})
+if (!exitTask) {
+      return new Response(
+        JSON.stringify({ message: 'Task not found!', success: false }),
+        { status: 404 }
+      );
+    }
+
+    body.taskTitle=exitTask.task_title,
+    body.task_coin=exitTask.payable_amount
     body.status = 'pending';
     body.createdAt = new Date();
-
-   console.log('body data',body)
     const [submissionResult, taskUpdateResult] = await Promise.all([
       subColl.insertOne(body),
       taskColl.updateOne(
-        { _id: new ObjectId(body.taskID) }, 
-        { $inc: { completed_workers: 1 } } 
+        { _id: taskId },
+        { $inc: { completed_workers: 1 } }
       )
     ]);
-  
-
-    console.log('submission',submissionResult)
 
     if (submissionResult.insertedId) {
+      const notification = {
+        message: `${body.userName} has submitted a task: "${exitTask.task_title}"`,
+        toEmail:exitTask.createdEmail, 
+        fromEmail:body.userEmail, 
+        actionRoute: "/dashboard", 
+        time: new Date(),
+        status: "unread"
+      };
+
+   
+      await notificationColl.insertOne(notification);
+
       return new Response(
         JSON.stringify({
           message: 'Task Submission successful!',
@@ -37,14 +56,13 @@ export async function POST(req) {
     }
     
   } catch (error) {
-    console.error(error);
+    console.error('Submission Error:', error);
     return new Response(
       JSON.stringify({ error: "Internal Server Error", success: false }),
       { status: 500 }
     );
   }
 }
-
 
 
 

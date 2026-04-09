@@ -6,25 +6,25 @@ import { authOptions } from '../auth/[...nextauth]/route';
 const taskColl =  connect("TaskCollection");
     const userColl = connect("userCOllection");
 
-export async function POST(req, res) {
+export async function POST(req) { 
   try {
-    // 1️ Connect to collections
-    
-
-    // 2️ Get body
     const body = await req.json();
-    const { totalCost, createdEmail } = body; // make sure frontend sends email
-     body.status='active'
-    if (!createdEmail || !totalCost) {
+    
+  
+    const { total_cost, createdEmail } = body; 
+    
+    body.status = 'active';
+    body.createdAt = new Date().toISOString();
+
+    if (!createdEmail || !total_cost) {
       return new Response(
-        JSON.stringify({ message: "Invalid data", success: false }),
+        JSON.stringify({ message: "Invalid data: Email or Cost missing", success: false }),
         { status: 400 }
       );
     }
 
-    // 3️ Find user
-    const user = await userColl.findOne({ email:createdEmail });
-    console.log('user',user)
+    const user = await userColl.findOne({ email: createdEmail });
+    
     if (!user) {
       return new Response(
         JSON.stringify({ message: "User not found", success: false }),
@@ -32,8 +32,8 @@ export async function POST(req, res) {
       );
     }
 
-    // 4️ Check coin balance
-    if (totalCost > user.coin) {
+ 
+    if (Number(user.coin) < Number(total_cost)) {
       return new Response(
         JSON.stringify({
           message: "Not enough coin. Please purchase coin.",
@@ -43,27 +43,26 @@ export async function POST(req, res) {
       );
     }
 
-    // 5️ Prepare task data
-    body.createdAt = new Date().toISOString();
-
-    // 6️ Transaction: deduct coin & insert task
-    const [userResult,taskResult] = await Promise.all([
-      userColl.updateOne(
-        { email:createdEmail },
-        { $inc: { coin: -totalCost } }
-      ),
-      taskColl.insertOne(body),
-    ]);
-
-    return new Response(
-      JSON.stringify({
-        message: "Task created successfully!",
-        success: true,
-        data:taskResult,
-      
-      }),
-      { status: 200 }
+    const userUpdate = await userColl.updateOne(
+      { email: createdEmail },
+      { $inc: { coin: -Number(total_cost) } }
     );
+
+
+    if (userUpdate.modifiedCount > 0) {
+        const taskResult = await taskColl.insertOne(body);
+        return new Response(
+            JSON.stringify({
+              message: "Task created successfully!",
+              success: true,
+              data: taskResult,
+            }),
+            { status: 200 }
+          );
+    }
+
+    throw new Error("Failed to update user balance");
+
   } catch (error) {
     console.error("Error:", error);
     return new Response(
@@ -72,5 +71,3 @@ export async function POST(req, res) {
     );
   }
 }
-
-
