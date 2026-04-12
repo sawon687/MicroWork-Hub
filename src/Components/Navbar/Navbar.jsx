@@ -11,6 +11,7 @@ import ProfileDropdown from '../Ui/profileDropdown';
 import NotificationModal from '../NotificationModal/NotificationModal';
 import Logo from '../Ui/Logo';
 import SearchModal from '../Ui/SearchModal';
+import LiveCoin from '../../lib/LiveCoin';
 
 const Navbar = () => {
     const pathname = usePathname();
@@ -46,10 +47,7 @@ const Navbar = () => {
 
               { session?.user ? (
                <>
-                <div className='px-5 py-1 border border-white/10 rounded-xl flex bg-gray-800 text-emerald-500'
-                >
-                  {/* user coins */}
-                   <Coins></Coins> <span>{session?.user?.coin}</span></div>
+                <LiveCoin></LiveCoin>
 
                    
             {/* notification */}

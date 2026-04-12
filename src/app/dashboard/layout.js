@@ -16,11 +16,12 @@ import SidarLink from "../../Components/Ui/SidarLink";
 import NextAuthPovider from '../../provider/NextAuthPovider';
 import UseQueryProvider from '../../provider/UseQueryProvider';
 import NotificationModal from '../../Components/NotificationModal/NotificationModal';
+import LiveCoin from '../../lib/LiveCoin';
 
 // Role ভিত্তিক links
 const workerLinks = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Available Tasks", url: "/dashboard/tasks", icon: ListTodo },
+  // { title: "Available Tasks", url: "/dashboard/tasks", icon: ListTodo },
   { title: "My Submissions", url: "/dashboard/my-submission", icon: FileCheck },
   { title: "Withdraw", url: "/dashboard/withdraw", icon: Wallet },
 ];
@@ -29,6 +30,7 @@ const buyerLinks = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Add Task", url: "/dashboard/add-task", icon: PlusCircle },
   { title: "My Tasks", url: "/dashboard/my-task", icon: FolderOpen },
+  { title: "Purchase Coins", url: "/dashboard/purchase-coin", icon: Coins }
 ];
 
 const adminLinks = [
@@ -37,9 +39,6 @@ const adminLinks = [
   { title: "All Tasks", url: "/dashboard/tasks", icon: ListTodo },
 ];
 
-const commonLinks = [
-  { title: "Purchase Coins", url: "/dashboard/purchase-coin", icon: Coins },
-];
 
 const getLinks = (role) => {
   let baseLinks = [];
@@ -47,12 +46,14 @@ const getLinks = (role) => {
   else if (role === "Admin") baseLinks = adminLinks;
   else baseLinks = workerLinks;
   
-  return [...baseLinks, ...commonLinks];
+  return baseLinks
 };
 
 const DashboardLayout = ({ children }) => {
   const [open, setOpen] = useState(true); // Default open রাখলে দেখতে ভালো লাগে
   const { data: session } = useSession();
+
+  
   
   const role = session?.user?.role;
   const links = getLinks(role);
@@ -118,12 +119,7 @@ const DashboardLayout = ({ children }) => {
           <div className="flex items-center gap-4">
             {/* Coins Display */}
             <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-full shadow-sm">
-                <div className="bg-emerald-500 p-1 rounded-full">
-                    <Coins size={14} className="text-white" />
-                </div>
-                <span className="text-emerald-700 font-black text-sm">
-                    {session?.user?.coin || 0}
-                </span>
+               <LiveCoin></LiveCoin>
             </div>
 
             {/* Notification */}

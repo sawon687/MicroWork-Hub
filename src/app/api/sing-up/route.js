@@ -1,5 +1,7 @@
 import connect from "@/lib/dbconnect";
 import bcrypt from "bcryptjs";
+import { authOptions } from '../auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
 const userColl=connect('userCOllection')
 
 export async function POST(req,res){
@@ -49,5 +51,35 @@ const hashedPassword = await bcrypt.hash(password, 10);
     
 }
 
+// single session user
+
+export async function GET(req) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    console.log("session is server my task sawon", session);
+
+    if (!session) {
+      return Response.json({ message: "No session" }, { status: 401 });
+    }
+
+   
+    const result=   await userColl.findOne({email:session?.user?.email })
+      
+
+
+    return Response.json(
+      { message: "coin is found", success: true, coin:result.coin },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.log("error", error);
+    return Response.json(
+      { message: "Something went wrong", success: false },
+      { status: 500 }
+    );
+  }
+}
 
 

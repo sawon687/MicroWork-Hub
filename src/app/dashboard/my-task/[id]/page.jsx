@@ -205,9 +205,9 @@ const SubmissionPage = () => {
       </div>
 
       {selectedImage && (
-        <div className="fixed inset-0 z-[999] bg-black/90 flex items-center justify-center p-4" onClick={() => setSelectedImage(null)}>
-            <div className="max-w-4xl w-full bg-white p-2 rounded-2xl relative" onClick={e => e.stopPropagation()}>
-               <img src={selectedImage} className="max-h-[85vh] w-full object-contain" alt="Proof" />
+        <div className="fixed  inset-0 z-[999] bg-black/90 flex items-center justify-center " onClick={() => setSelectedImage(null)}>
+            <div className="max-w-3xl w-full   rounded-2xl relative" onClick={e => e.stopPropagation()}>
+               <img src={selectedImage} className="max-h-full w-full rounded-2xl object-contain" alt="Proof" />
             <button 
                 onClick={() => setSelectedImage(null)}
                 className="absolute -top-12 right-0 text-white flex items-center gap-2 font-black text-sm hover:text-emerald-400 transition-colors"

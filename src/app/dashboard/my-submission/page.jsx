@@ -148,7 +148,7 @@ const Page = () => {
                                     <div className="flex items-center gap-1.5 bg-slate-50 group-hover:bg-emerald-500 px-3 py-2 rounded-xl border border-slate-100 group-hover:border-emerald-400 transition-all duration-300">
                                         <Coins size={14} className="text-emerald-500 group-hover:text-white" />
                                         <span className="text-base font-black text-slate-800 group-hover:text-white tracking-tighter">
-                                            {item.payable_amount || 0}
+                                            {item.task_coin || 0}
                                         </span>
                                     </div>
                                 </div>

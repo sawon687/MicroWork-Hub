@@ -46,12 +46,12 @@ const RegisterForm = () => {
   const handleRegister = async (data) => {
    try {
     setLoading(true)
-     console.log(data);
+  
       const photo=data.photo?.[0];
       if(!photo)return alert("Photo is required!")
       const formData=new FormData();
       formData.append("image",photo)
-       console.log("KEY:", process.env.NEXT_PUBLIC_IMAGE_API_KEY);
+   
       const res = await fetch(
         `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_API_KEY}`,
         { method: "POST", body: formData }
@@ -69,8 +69,8 @@ const RegisterForm = () => {
     })).json();
      if(result.success){
          setOpen(true);
-         setMessage(result)
-          console.log('message',result)
+         setMessage(result.message)
+         
           setLoading(false)
             signIn("credentials",{
               email:data.email,

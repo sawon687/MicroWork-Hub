@@ -16,7 +16,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [isOpen,setOpen]=useState(false);
   const [message,setMessage]=useState('')
-  const [modalType,setModalType]=useState('error')
+  const [modalType,setModalType]=useState('')
   const router=useRouter()
   const {
     register,
@@ -27,7 +27,7 @@ export default function Login() {
   } = useForm();
   const handleLogin = async (data) => {
     try { 
-       console.log('data',data)
+      
        setLoading(true)
     const result = await signIn('credentials',{
            email: data?.email,
