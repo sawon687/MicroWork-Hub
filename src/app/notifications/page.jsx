@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { 
-  Bell, Calendar, ChevronRight, CheckCircle2, 
-  XCircle, Info, Clock, Inbox, Trash2, Sparkles, Loader2, AlertTriangle, User,
-  Check
+  Bell, Calendar, CheckCircle2, XCircle, Info, Clock, 
+  Inbox, Trash2, Sparkles, Loader2, AlertTriangle, User, Check
 } from "lucide-react";
 import { useRouter } from 'next/navigation';
 
@@ -13,14 +12,13 @@ const AllNotificationsPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
-  
-  // States
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false); 
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Fetch Notifications
+
   const { data: notifications = [], isLoading } = useQuery({
     queryKey: ['all-notifications', session?.user?.email],
     queryFn: async () => {
@@ -32,30 +30,35 @@ const AllNotificationsPage = () => {
     enabled: !!session?.user?.email,
   });
 
-  // FIXED: Handle Delete Function
-  const handleDelete = async (id) => {
+ 
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     setIsDeleting(true);
+
     try {
-      // নির্দিষ্ট ইউআরএল ফরম্যাট তৈরি করা হচ্ছে
+      // URL dynamic ভাবে তৈরি করা
       let url = `/api/notifications?email=${session?.user?.email}`;
       
-      // যদি নির্দিষ্ট আইডি থাকে (সব ডিলিট না হয়), তবে আইডি প্যারামিটার যোগ হবে
-      if (id && id !== 'all') {
-        url += `&id=${id}`;
+      if (deleteTarget === 'all') {
+        url += `&type=all`; 
+      } else {
+        url += `&id=${deleteTarget}`; // নির্দিষ্ট আইডি ডিলিট করার জন্য
       }
 
-      const res = await fetch(url, { method: 'DELETE' });
-      
+      const res = await fetch(url, {
+        method: 'DELETE',
+      });
+
       if (res.ok) {
-        // ডাটা রিফ্রেশ করা
+       
         await queryClient.invalidateQueries(['all-notifications', session?.user?.email]);
+        
         setIsModalOpen(false);
         setIsSuccessModalOpen(true);
-        
         setTimeout(() => setIsSuccessModalOpen(false), 2000);
       }
     } catch (error) {
-      console.error('Delete failed', error);
+      console.error('Delete operation failed:', error);
     } finally {
       setIsDeleting(false);
       setDeleteTarget(null);
@@ -88,10 +91,10 @@ const AllNotificationsPage = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-24">
       
-      {/* --- SUCCESS MESSAGE MODAL --- */}
+      {/* --- SUCCESS MODAL --- */}
       {isSuccessModalOpen && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white/60 backdrop-blur-md">
-          <div className="bg-white rounded-[32px] p-10 max-w-xs w-full shadow-2xl border border-slate-50 text-center">
+          <div className="bg-white rounded-[32px] p-10 max-w-xs w-full shadow-2xl border border-slate-50 text-center animate-in zoom-in duration-300">
             <div className="w-20 h-20 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
               <Check size={40} strokeWidth={3} />
             </div>
@@ -122,7 +125,7 @@ const AllNotificationsPage = () => {
                 Go Back
               </button>
               <button 
-                onClick={() => handleDelete(deleteTarget)}
+                onClick={handleDelete}
                 disabled={isDeleting}
                 className="flex-1 py-3.5 rounded-2xl font-bold text-white bg-rose-500 hover:bg-rose-600 shadow-lg transition-all text-sm disabled:opacity-50"
               >
@@ -133,10 +136,9 @@ const AllNotificationsPage = () => {
         </div>
       )}
 
-      {/* --- PAGE CONTENT --- */}
+      {/* --- MAIN CONTENT --- */}
       <div className="max-w-2xl mx-auto px-4 pt-28 relative z-10">
         
-        {/* Header Section */}
         <div className="flex flex-col gap-1 mb-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full w-fit mb-2">
@@ -154,11 +156,10 @@ const AllNotificationsPage = () => {
           </div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">History</h1>
           <p className="text-slate-500 font-medium">
-             Tracking <span className="text-slate-900">{notifications.length}</span> recent updates
+              Tracking <span className="text-slate-900">{notifications.length}</span> recent updates
           </p>
         </div>
 
-        {/* Notifications List */}
         <div className="space-y-4">
           {notifications.length > 0 ? (
             notifications.map((notif) => {
@@ -188,7 +189,6 @@ const AllNotificationsPage = () => {
 
                   <button 
                     onClick={(e) => { 
-                      e.preventDefault();
                       e.stopPropagation(); 
                       openConfirm(notif._id); 
                     }}
@@ -210,7 +210,7 @@ const AllNotificationsPage = () => {
           )}
         </div>
 
-        {/* Dynamic Support/Role Tip */}
+        {/* Tip Section */}
         {notifications.length > 0 && (
           <div className="mt-12 p-8 rounded-[35px] bg-slate-900 text-white relative overflow-hidden group">
             <div className="relative z-10">

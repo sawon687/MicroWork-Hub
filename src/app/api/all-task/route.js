@@ -1,4 +1,3 @@
-
 import connect from '../../../lib/dbconnect';
 
 const taskColl = connect("TaskCollection");
@@ -8,9 +7,10 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url)
 
     const page = parseInt(searchParams.get('page')) || 1
-    const limit = parseInt(searchParams.get('limit')) || 9
-    const search = searchParams.get('search') || ''
-
+  
+    const search = searchParams.get('search') 
+    const category=searchParams.get('category') 
+    const limit=9;
     const skip = limit * (page - 1)
 
     let query = {}
@@ -23,14 +23,16 @@ export async function GET(req) {
         ]
       }
     }
-
-    const result = await taskColl
-      .find(query)
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-
-    const totalTask = await taskColl.countDocuments(query)
+   
+    if (category && category !== "All") {
+        query.category = category;
+}
+   
+  const [result, totalTask] = await Promise.all([
+      taskColl.find(query).skip(skip).limit(limit).toArray(),
+      taskColl.countDocuments(query)
+    ]);
+   
     const pageNumber = Math.ceil(totalTask / limit)
 
     return Response.json({

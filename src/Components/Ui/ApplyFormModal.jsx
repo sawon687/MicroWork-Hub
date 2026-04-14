@@ -176,7 +176,7 @@ const ApplyFormModal = ({ taskId ,taskTitle}) => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Screenshot (optional)</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Screenshot</label>
                                     {preview ? (
                                         <div className="relative rounded-xl overflow-hidden border-2 border-emerald-100 shadow-sm">
                                             <img src={preview} alt="Preview" className="w-full h-40 object-cover" />

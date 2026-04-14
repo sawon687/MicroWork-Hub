@@ -35,8 +35,8 @@ const SearchModal = () => {
             }
             setIsLoading(true);
             try {
-                const limit = 9; // Result limit set kora hoyeche
-                const response = await fetch(`/api/all-task?search=${search}&limit=${limit}`);
+              // Result limit set kora hoyeche
+                const response = await fetch(`/api/all-task?search=${search}`);
                 const result = await response.json();
                 // API structure onujayi data set kora
                 setTasks(result?.data?.result || []);
@@ -90,7 +90,7 @@ const SearchModal = () => {
                             {/* Input Field Section */}
                             <div className="relative flex items-center px-6 py-5 border-b border-white/5">
                                 <HiOutlineSearch className={`w-6 h-6 ${isLoading ? 'animate-bounce' : ''} text-emerald-500`} />
-                                <form onSubmit={handleSubmit((data) => console.log(data))} className="flex-1">
+                                <form onSubmit={handleSubmit} className="flex-1">
                                     <input 
                                         autoFocus
                                         type="text" 
@@ -118,7 +118,7 @@ const SearchModal = () => {
                                            
                                             <div 
                                            
-                                                className="group flex items-center gap-4 p-3 rounded-2xl bg-white/5 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/20 transition-all duration-200 cursor-pointer"
+                                                className="group flex items-center my-4 gap-4 p-3 rounded-2xl bg-white/5 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/20 transition-all duration-200 cursor-pointer"
                                             >
                                                 {/* Task Image */}
                                                 <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0">

@@ -197,10 +197,14 @@ const AddTaskForm = () => {
               className="w-full mt-1 px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
             >
               <option value="">Select Category</option>
-              <option value="social">Social Media</option>
-              <option value="youtube">YouTube</option>
-              <option value="data-entry">Data Entry</option>
-              <option value="survey">Survey</option>
+              <option value="Social">Social Media</option>
+              <option value="Data Entry">Data Entry</option>
+              <option value="Translation">Translation</option>
+                <option value="Desgin">Desgin</option>
+                  <option value="Review">Review</option>
+                  <option value="Testing">Testing</option>
+                  <option value="Writing">Writing</option>
+            
             </select>
           </div>
            {/* submission requrment */}

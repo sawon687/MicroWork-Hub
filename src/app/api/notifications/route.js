@@ -1,22 +1,36 @@
-import connect from "@/lib/dbconnect"; // apnar db connect file
+import connect from "@/lib/dbconnect";
 import { NextResponse } from "next/server";
-    const notifColl =  connect("notificationCollection");
-    const notificationColl=connect('notificationCollection')
+import { getServerSession } from "next-auth";
+import { authOptions } from '../auth/[...nextauth]/route';
+import { ObjectId } from 'mongodb';
+ const notifColl =  connect("notificationCollection");
 export async function GET(req) {
   try {
-    const { searchParams } = new URL(req.url);
-    const email = searchParams.get("email");
+  
+    const session = await getServerSession(authOptions);
 
-    if (!email) {
-      return NextResponse.json({ message: "Email required" }, { status: 400 });
+    if (!session || !session.user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
- // apnar collection name
+    const email = session.user.email;
+    const role = session.user.role;
 
-    // matching email search and latest notification sorted first
+   
+
+    let query = {};
+
+    if (role === "Admin") {
+   
+      query = {recipientRole: role, }; 
+    } else {
+    
+      query = { toEmail: email };
+    }
+
     const result = await notifColl
-      .find({ toEmail: email })
-      .sort({ time: -1 }) 
+      .find(query)
+      .sort({ time: -1 })
       .toArray();
 
     return NextResponse.json({ success: true, data: result });
@@ -31,6 +45,7 @@ export async function DELETE(req) {
   try {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get("email");
+    const id=searchParams.get('id')
 
     if (!email) {
       return NextResponse.json({ 
@@ -38,10 +53,16 @@ export async function DELETE(req) {
         message: "Email is required to clear notifications" 
       }, { status: 400 });
     }
+    let result;
+   if(id)
+   {
+      result=await notifColl.deleteOne({_id:new ObjectId(id)})
+   }
 
-
-
-    const result = await notifColl.deleteMany({ toEmail: email });
+  
+  
+      result = await notifColl.deleteMany({ toEmail: email });
+   
 
    
     return NextResponse.json({ 

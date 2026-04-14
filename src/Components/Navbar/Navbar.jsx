@@ -31,7 +31,7 @@ const Navbar = () => {
         {/* Menu */}
         <div className="hidden md:flex items-center gap-8 text-gray-300">
           <Link href="/" className="hover:text-white transition">Home</Link>
-          <Link href="/all-task" className="hover:text-white transition">All Task</Link>
+          <Link href="/all-tasks" className="hover:text-white transition">All Task</Link>
           <Link href="/pricing" className="hover:text-white transition">Pricing</Link>
           <Link href="/about" className="hover:text-white transition">About</Link>
           <SearchModal></SearchModal>

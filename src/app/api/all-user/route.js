@@ -2,10 +2,18 @@ import { ObjectId } from 'mongodb';
 import connect from '../../../lib/dbconnect';
 const userColl=connect('userCOllection')
 
-export async function GET() {
+export async function GET(req) {
   try {
-  
-    const result=await userColl.find().toArray()
+   const {searchParams}=new URL(req.url)
+   const search=searchParams.get('search')||''
+
+   const searchValue= search?{
+  $or: [
+    { name: { $regex: search, $options: 'i' } },
+    { email: { $regex: search, $options: 'i' } }
+  ]
+}:{}
+    const result=await userColl.find(searchValue).sort({createdAt: -1}).toArray()
 
     return Response.json({
       success: true,

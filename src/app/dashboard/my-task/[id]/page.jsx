@@ -33,22 +33,23 @@ const SubmissionPage = () => {
     enabled: !!id, 
   });
 
-  const handleAction = async (submissionId, status, taskCoin) => {
+  const handleAction = async (item,status) => {
     try {  
-      setProcessingId(submissionId);
+      setProcessingId(item._id);
       setProcessingAction(status); 
-      const response = await fetch(`/api/my-task/${submissionId}`, {
+      const response = await fetch(`/api/my-task/${item?._id}`, {
         method: 'PUT', 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          status, 
+          status:status, 
           buyerEmail:session?.user?.email, 
-          taskCoin, 
-          buyerName: session?.user?.userName 
+          taskCoin:item.task_coin, 
+          buyerName: session?.user?.name, 
+          userEmail:item.userEmail,
         })
       });
       const result = await response.json();
-      if (result?.success) {
+      if (result.success) {
         await refetch();
         setIsOpen(true);
         setMessage(result.message);
@@ -184,14 +185,14 @@ const SubmissionPage = () => {
                 <div className="flex gap-3 mt-auto">
                   <button 
                     disabled={!!processingId}
-                    onClick={() => handleAction(item._id, 'approved', item.task_coin)}
+                    onClick={() => handleAction(item,'approved')}
                     className="flex-[4] bg-emerald-500 hover:bg-emerald-600 disabled:bg-emerald-300 text-white py-3.5 rounded-2xl text-[11px] font-black tracking-widest transition-all shadow-lg shadow-emerald-200 flex items-center justify-center gap-2 uppercase"
                   >
                     {isProcessingThisItem && processingAction === 'approved' ? <Loader2 className='w-4 h-4 animate-spin'/> : <><FaCheck /> Approve Task</>}
                   </button>
                   <button 
                     disabled={!!processingId}
-                    onClick={() => handleAction(item._id, 'rejected', item.task_coin)}
+                    onClick={() => handleAction(item,'rejected')}
                     className="flex-1 bg-white hover:bg-rose-500 text-rose-500 hover:text-white py-3.5 rounded-2xl transition-all flex items-center justify-center border-2 border-rose-100 hover:border-rose-500 shadow-sm"
                     title="Reject Submission"
                   >

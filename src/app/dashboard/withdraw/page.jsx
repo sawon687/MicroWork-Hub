@@ -6,6 +6,7 @@ import {
   CreditCard, Loader2, AlertCircle, CheckCircle2 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import MessageModal from '../../../Components/Ui/MessageModal';
 
 const WithdrawalPage = () => {
   const { data: session } = useSession();
@@ -18,6 +19,7 @@ const WithdrawalPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
  const [loading,setLoading]=useState(false)
+
   const COIN_RATE = 20; // 20 coins = 1 dollar
   const MIN_WITHDRAW_COIN = 200;
 
@@ -34,7 +36,7 @@ const fetchUserCoins = async () => {
     } catch (error) {
       console.log("Fetch error:", error);
     } finally {
-      setLoading(false); // এখানে false হবে
+      setLoading(false); 
     }
   };
 
@@ -64,11 +66,11 @@ const fetchUserCoins = async () => {
       });
 
       if (res.ok) {
-        
+         
         setSuccess(true);
         setWithdrawCoin(0);
         setAccountNumber("");
-        // এখানে ইউজার কয়েন আপডেট করার জন্য রিফ্লেশ বা রি-ফেচ করতে পারেন
+          await fetchUserCoins();
       }
     } catch (error) {
       console.error("Withdraw error:", error);
@@ -240,6 +242,7 @@ if(loading) return (<div className='min-h-screen flex justify-center items-cente
           </motion.div>
         )}
       </AnimatePresence>
+    
     </div>
   );
 };

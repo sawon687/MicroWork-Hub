@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Bell, Loader2, BellOff, ArrowRight, CheckCheck } from "lucide-react";
 import { GoBell } from 'react-icons/go';
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 const NotificationModal = ({ Navbar }) => {
   const [isOpen, setOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0); 
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -18,16 +19,21 @@ const NotificationModal = ({ Navbar }) => {
       if (!session?.user?.email) return [];
       const res = await fetch(`/api/notifications?email=${session?.user?.email}`);
       const result = await res.json();
-      return result.data || [];
+      const data = result.data || [];
+      setUnreadCount(data.length); 
+      return data;
     },
     enabled: !!session?.user?.email,
   });
 
   const isDark = Navbar === 'Navbar';
 
-  // Specific Notification-e click korle action page-e niye jabe
+ 
   const handleNotificationClick = (route) => {
     setOpen(false);
+    if (unreadCount > 0) {
+      setUnreadCount(prev => prev - 1);
+    }
     if (route) {
       router.push(route);
     }
@@ -35,16 +41,18 @@ const NotificationModal = ({ Navbar }) => {
 
   return (
     <div className="relative inline-block">
-      {/* Bell Icon */}
+      {/* Bell Icon with Counter */}
       <button 
         onClick={() => setOpen(!isOpen)} 
         className={`relative p-2 rounded-full transition-all duration-300 ${isDark ? 'hover:bg-gray-800 text-white' : 'hover:bg-gray-100 text-gray-700'}`}
       >
         <GoBell size={24} />
-        {notifications.length > 0 && (
-          <span className="absolute top-1.5 right-1.5 flex h-3 w-3">
+        {unreadCount > 0 && (
+          <span className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500 border-2 border-white"></span>
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-rose-500 border-2 border-white text-[10px] text-white font-bold items-center justify-center">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
           </span>
         )}
       </button>
@@ -63,7 +71,7 @@ const NotificationModal = ({ Navbar }) => {
                 </div>
                 <div>
                   <h2 className={`font-bold text-sm ${isDark ? 'text-white' : 'text-gray-800'}`}>Activity Feed</h2>
-                  <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{notifications.length} Unread Updates</p>
+                  <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{unreadCount} Unread Updates</p>
                 </div>
               </div>
               <button onClick={() => setOpen(false)} className={`p-1.5 rounded-xl transition-colors ${isDark ? 'hover:bg-gray-800 text-gray-400' : 'hover:bg-gray-100 text-gray-400'}`}>
@@ -83,7 +91,7 @@ const NotificationModal = ({ Navbar }) => {
                   {notifications.map((item) => (
                     <div
                       key={item._id}
-                      onClick={() => handleNotificationClick(item.actionRoute)}
+                      onClick={() =>{ handleNotificationClick(item.actionRoute); router.push('/notifications')}}
                       className={`group px-5 py-4 cursor-pointer transition-all duration-200 flex gap-3 ${isDark ? 'hover:bg-gray-800/50' : 'hover:bg-emerald-50/40'}`}
                     >
                       <div className="mt-1">
@@ -98,11 +106,15 @@ const NotificationModal = ({ Navbar }) => {
                              <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
                              {new Date(item.time).toLocaleString([], { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' })}
                            </span>
-                           {/* Action Button on Click */}
-                           <Link href={'/notifications'} onClick={(e) => {
-                          e.stopPropagation(); // this prevents the parent div's onClick from firing
-                             setOpen(false);      // close the modal
-                        }} className="bg-emerald-500/10 text-emerald-500 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 flex items-center gap-1 text-[10px] font-bold">
+                           <Link 
+                            href={'/notifications'} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpen(false);
+                              if (unreadCount > 0) setUnreadCount(prev => prev - 1);
+                            }} 
+                            className="bg-emerald-500/10 text-emerald-500 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 flex items-center gap-1 text-[10px] font-bold"
+                          >
                              View details <ArrowRight size={12} />
                            </Link>
                         </div>
@@ -121,11 +133,14 @@ const NotificationModal = ({ Navbar }) => {
               )}
             </div>
 
-            {/* Footer - "View All" feature */}
+            {/* Footer */}
             {notifications.length > 0 && (
               <div className={`px-5 py-3 border-t flex items-center justify-between ${isDark ? 'border-gray-800 bg-gray-900/50' : 'border-gray-50 bg-gray-50/30'}`}>
                 <button 
-                  onClick={() => refetch()}
+                  onClick={() => {
+                    refetch();
+                    setUnreadCount(0); // সব পড়া হিসেবে মার্ক করলে ০ করে দেওয়া
+                  }}
                   className="text-[10px] font-bold text-gray-500 hover:text-emerald-500 flex items-center gap-1 uppercase transition-all"
                 >
                   <CheckCheck size={14} /> Mark all read

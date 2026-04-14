@@ -1,62 +1,76 @@
 'use client';
 import React, { useState } from 'react';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { 
   Users, ShoppingBag, Coins, CreditCard, 
-  CheckCircle, Loader2, Inbox, ArrowUpRight, Search
+  CheckCircle, Loader2, Inbox, Search
 } from "lucide-react";
 import { motion } from "framer-motion";
+import MessageModal from '../Ui/MessageModal';
+import { useForm } from 'react-hook-form';
+import { useDebounce } from 'use-debounce';
 
 const AdminDashboard = () => {
-  const queryClient = useQueryClient();
   const [processingId, setProcessingId] = useState(null);
+       const [isOpen,setOpen]=useState(false);
+  const [message,setMessage]=useState('')
+  const [modalType,setModalType]=useState('')
+ const { register, watch } = useForm({ mode: "onChange" });
+  const searchValue = watch('search') || '';
+  const [debouncedSearch] = useDebounce(searchValue, 500);
 
-  // ১. ড্যাশবোর্ড স্ট্যাটস ফেচ করা (API endpoint আপনার অনুযায়ী পরিবর্তন করবেন)
-  const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['admin-stats'],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['admin-dashboard-data', debouncedSearch],
     queryFn: async () => {
-      const res = await fetch('/api/admin/stats');
-      return res.json();
-    }
-  });
-
-  // ২. পেন্ডিং উইথড্র রিকোয়েস্ট ফেচ করা
-  const { data: withdrawRequests = [], isLoading: tableLoading } = useQuery({
-    queryKey: ['pending-withdrawals'],
-    queryFn: async () => {
-      const res = await fetch('/api/admin/withdrawals?status=pending');
+      const res = await fetch(`/api/admin/dashboard-combined?search=${debouncedSearch}`);
       const result = await res.json();
-      return result.data || [];
-    }
+      return result.data;
+    },
+    keepPreviousData: true, 
+    staleTime: 30000, 
   });
 
-  // ৩. পেমেন্ট সাকসেস হ্যান্ডেলার
-  const handlePaymentSuccess = async (request) => {
+  const stats = data?.stats || {};
+  const withdrawRequests = data?.withdrawRequests || [];
+const handlePaymentSuccess = async (request) => {
     setProcessingId(request._id);
     try {
-      const res = await fetch(`/api/admin/approve-withdrawal`, {
+      const res = await fetch(`/api/withdraw`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           requestId: request._id,
-          userEmail: request.worker_email,
-          coinsToDeduct: request.withdrawal_coin
+          workerEmail: request.worker_email,
+          coinsToDeduct: request.withdrawal_coin,
+          amount: request.withdrawal_amount, 
+          paymentSystem: request.payment_system 
         })
       });
 
       if (res.ok) {
-        queryClient.invalidateQueries(['pending-withdrawals']);
-        queryClient.invalidateQueries(['admin-stats']);
-        alert("Payment Approved & Coins Deducted!");
+         
+          refetch(); 
+      
+          setModalType("success");
+          setMessage("Payment Approved & Coins Deducted! 🎉");
+          setOpen(true);
+      } else {
+        
+          setModalType("error");
+          setMessage("Failed to process payment. Please try again.");
+          setOpen(true);
       }
     } catch (error) {
       console.error("Approval failed", error);
+      setModalType("error");
+      setMessage("An unexpected error occurred.");
+      setOpen(true);
     } finally {
       setProcessingId(null);
     }
   };
 
-  if (statsLoading || tableLoading) return (
+  if (isLoading) return (
     <div className="flex flex-col justify-center items-center h-screen bg-[#F8FAFC]">
       <Loader2 className="w-12 h-12 text-blue-600 animate-spin mb-4" />
       <p className="text-slate-500 font-bold font-syne">Loading Admin Intelligence...</p>
@@ -89,12 +103,16 @@ const AdminDashboard = () => {
               <p className="text-sm text-slate-400 font-medium">Review and approve pending payments</p>
             </div>
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+         
+
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input 
                 type="text" 
                 placeholder="Search by email..." 
+                {...register('search')}
                 className="pl-12 pr-6 py-3 bg-slate-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none w-full md:w-64"
               />
+           
             </div>
           </div>
 
@@ -109,6 +127,7 @@ const AdminDashboard = () => {
                   <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-slate-400 text-right">Action</th>
                 </tr>
               </thead>
+          
               <tbody className="divide-y divide-slate-50">
                 {withdrawRequests.length > 0 ? (
                   withdrawRequests.map((req) => (
@@ -164,6 +183,8 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+    <MessageModal isOpen={isOpen} onClose={() => setOpen(false)} message={message} type={modalType} />
+
     </div>
   );
 };

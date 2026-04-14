@@ -1,19 +1,17 @@
-import { Search } from 'lucide-react'
 import React from 'react'
-import CategoryButton from '../../Components/CategoryButtonandSort/CategoryButton'
-import SortButton from '../../Components/CategoryButtonandSort/SortButton'
 import TaskCard from '../../Components/TaskCard/TaskCard'
 import PagenationButton from '../../Components/Ui/PagenationButton'
+import CategoryButtonorSearch from '../../Components/CategoryButtonandSearchorSort/CategoryButtonorSearch'
 
-const getTaskData = async (limit, page) => {
+const getTaskData = async (search, page,category) => {
   // Added default values to prevent fetch errors if params are missing
-  const result = await (await fetch(`http://localhost:3000/api/all-task?limit=${limit || 6}&page=${page || 1}`)).json()
+  const result = await (await fetch(`${process.env.NEXTAUTH_URL}/api/all-task?$search=${search}&page=${page || 1}&category=${category}`)).json()
   return result.data
 }
 
 const page = async ({ searchParams }) => {
   const params = await searchParams
-  const data = await getTaskData(params.limit, params.page)
+  const data = await getTaskData(params.search, params.page,params.category)
   const taskdata = data?.result;
   const pageNumber = data?.pageNumber;
 
@@ -29,18 +27,7 @@ const page = async ({ searchParams }) => {
             Browse and apply for micro tasks to start earning
           </p>
 
-          <div className="flex flex-wrap items-center w-full gap-4">
-            <div className="relative w-full md:w-[420px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <input
-                type="text"
-                placeholder="Search tasks..."
-                className="w-full bg-gray-800/60 border border-gray-600 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-emerald-500"
-              />
-            </div>
-            <CategoryButton />
-          </div>
-          <SortButton />
+           <CategoryButtonorSearch></CategoryButtonorSearch>
         </div>
       </div>
 

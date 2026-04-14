@@ -4,11 +4,15 @@ import React from 'react'
 import AdminDashboard from '../../Components/DashboardHome/AdminDashboard'
 import BuyerHomeContent from '../../Components/DashboardHome/BuyerHomeContent'
 import WorkerDashboard from '../../Components/DashboardHome/WorkerDashboard'
+import { Loader2 } from 'lucide-react'
 
 const Page = () => {
   const { data: session } = useSession()
   const role = session?.user?.role
-
+if(!session)
+{
+   return <div className='flex items-center justify-center min-h-screen'> <Loader2 size={24} className='text-emerald-400 '></Loader2></div>
+}
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Admin Role Check */}

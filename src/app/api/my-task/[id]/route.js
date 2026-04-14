@@ -43,7 +43,7 @@ export async function PUT(req, { params }) {
   try {
     const body = await req.json();
     const { id } = await params;
-    const { status, buyerEmail, taskCoin, buyerName } = body;
+    const { status, buyerEmail, taskCoin, buyerName,userEmail } = body;
 
     const existingTask = await subColl.findOne({ _id: new ObjectId(id) });
     

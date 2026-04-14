@@ -175,7 +175,7 @@ const BuyerHomeContent = () => {
                       key={campaign.id} 
                       className="group hover:bg-blue-50/30 transition-colors cursor-pointer"
                     >
-                      <td className="px-6 py-4" onClick={() => router.push(`/dashboard/my-task`)}>
+                      <td className="px-6 py-4" onClick={() => router.push(`/dashboard/my-task/${campaign.id}`)}>
                         <div>
                           <p className="font-semibold text-gray-800 group-hover:text-blue-600">{campaign.title}</p>
                           <p className="text-xs text-gray-400">Ends: {new Date(campaign.date).toLocaleDateString()}</p>
@@ -193,8 +193,8 @@ const BuyerHomeContent = () => {
                       <td className="px-6 py-4 text-right">
                         <button 
                           onClick={(e) => {
-                            e.stopPropagation(); // টেবিল রো এর ক্লিক ইভেন্ট থামানোর জন্য
-                            router.push(`/dashboard/my-task/${campaign._id}`);
+                            e.stopPropagation();
+                            router.push(`/dashboard/my-task/${campaign.id}`);
                           }}
                           className="p-2 bg-gray-50 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm"
                         >

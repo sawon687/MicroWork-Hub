@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-
+import { motion, AnimatePresence } from 'framer-motion';
 const SidarLink = ({ children, href, open, icon }) => {
   const pathname=usePathname()
-  const isActive=pathname.startsWith(href)
+  const isActive=pathname === href
   return (
     <Link
       href={href}
@@ -11,6 +11,12 @@ const SidarLink = ({ children, href, open, icon }) => {
     >
       {icon}
       {open && <span>{children}</span>}
+       {isActive && (
+                    <motion.div 
+                      layoutId="activeTab"
+                      className={`absolute inset-0 rounded-xl z-0`}
+                    />
+                  )}
     </Link>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { Coins, PanelLeft, Bell, User as UserIcon, LogOut } from "lucide-react";
+import { Coins, PanelLeft, Bell, User as UserIcon, LogOut, Banknote } from "lucide-react";
 import { useState } from "react";
 import Logo from "../../Components/Ui/Logo";
 import {
@@ -11,19 +11,23 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
+import React from 'react'
 import { useSession, signOut } from "next-auth/react";
 import SidarLink from "../../Components/Ui/SidarLink";
 import NextAuthPovider from '../../provider/NextAuthPovider';
 import UseQueryProvider from '../../provider/UseQueryProvider';
 import NotificationModal from '../../Components/NotificationModal/NotificationModal';
 import LiveCoin from '../../lib/LiveCoin';
-
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 // Role ভিত্তিক links
 const workerLinks = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   // { title: "Available Tasks", url: "/dashboard/tasks", icon: ListTodo },
   { title: "My Submissions", url: "/dashboard/my-submission", icon: FileCheck },
   { title: "Withdraw", url: "/dashboard/withdraw", icon: Wallet },
+  { title:'My Withdrawals',url:"/dashboard/my-withdrawals",icon:Banknote}
 ];
 
 const buyerLinks = [
@@ -37,7 +41,10 @@ const adminLinks = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Manage Users", url: "/dashboard/manage-users", icon: Users },
   { title: "All Tasks", url: "/dashboard/tasks", icon: ListTodo },
+  {title:'Payment History',url:'/dashboard/payment-history',icon:Banknote}
 ];
+
+
 
 
 const getLinks = (role) => {
@@ -53,7 +60,7 @@ const DashboardLayout = ({ children }) => {
   const [open, setOpen] = useState(true); // Default open রাখলে দেখতে ভালো লাগে
   const { data: session } = useSession();
 
-  
+  const pathname=usePathname()
   
   const role = session?.user?.role;
   const links = getLinks(role);
@@ -73,23 +80,50 @@ const DashboardLayout = ({ children }) => {
                
           </div>
 
-          <nav className="mt-6 flex-1 px-3 space-y-1">
-            {open && (
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-4 mb-2">
-                {role} Menu
-              </p>
-            )}
-            {links?.map(({ title, url, icon: Icon }, i) => (
-              <SidarLink
-                key={i}
-                href={url}
-                icon={<Icon size={20} />}
-                open={open}
-              >
-                {title}
-              </SidarLink>
-            ))}
-          </nav>
+      <nav className="flex-1 px-4 py-6 space-y-3 overflow-y-auto overflow-x-hidden">
+  {links.map((item) => {
+    const isActive = pathname === item.url;
+    return (
+      <Link
+        key={item.title}
+        href={item.url}
+        className={`
+          relative flex items-center gap-4 px-5 py-3 rounded-xl transition-all duration-300 group
+          /* Font weight 'extra-bold' kora hoyeche thickness baranor jonno */
+          font-extrabold text-[15px] tracking-wide
+          ${isActive 
+            ? 'text-emerald-400' 
+            : 'hover:text-emerald-400 text-slate-200'}
+          ${!open ? 'justify-center px-0' : ''}
+        `}
+      >
+        {isActive && (
+          <motion.div 
+            layoutId="activeTab"
+            /* Background ke 'thick' korar jonno border ebong shadow add kora hoyeche */
+            className="absolute inset-0 bg-gray-800/80 border-2 border-emerald-500/20 shadow-lg rounded-xl z-0"
+            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+          />
+        )}
+        
+        <item.icon 
+          /* Icon stroke thick korar jonno size o weight adjust kora hoyeche */
+          size={24} 
+          strokeWidth={isActive ? 2.5 : 2}
+          className={`relative z-10 shrink-0 ${
+            isActive ? 'text-emerald-400' : 'group-hover:scale-110 transition-transform'
+          }`} 
+        />
+        
+        {open && (
+          <span className="relative z-10  whitespace-nowrap">
+            {item.title}
+          </span>
+        )}
+      </Link>
+    );
+  })}
+</nav>
 
           <div className="p-4 border-t border-white/10">
              <button className="flex items-center gap-3 p-3 w-full text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all">
@@ -159,4 +193,4 @@ const DashboardLayout = ({ children }) => {
   );
 };
 
-export default DashboardLayout;
+export default React.memo(DashboardLayout);
