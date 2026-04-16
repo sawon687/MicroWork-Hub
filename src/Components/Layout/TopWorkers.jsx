@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { motion } from "framer-motion";
 import { Coins } from 'lucide-react';
 import HeadingTage from '../Ui/HeadingTage';
-import ContorleAni from '../ContorleAni/ContorleAni';
+import ContorleAni from '../MotionContorleAni/ContorleAni';
+
 
 const TopWorkers = ({ topWorkers}) => {
     const [fadeUp]=useState(ContorleAni())

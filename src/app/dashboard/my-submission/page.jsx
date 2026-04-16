@@ -2,6 +2,7 @@
 import { Coins, CheckCircle2, ListChecks, Clock, LayoutDashboard, TrendingUp } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
+import NormalLoading from '../../../Components/LoadingAll/NormalLoading'
 
 const Page = () => {
     const { data: session } = useSession()
@@ -44,9 +45,7 @@ const Page = () => {
     }, [email])
 
     if (loading) return (
-        <div className="flex justify-center items-center h-screen bg-white">
-            <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
+       <NormalLoading></NormalLoading>
     )
 
     const approvedCount = submissions.filter(s => s.status === 'approved').length;

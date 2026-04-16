@@ -111,9 +111,7 @@ const AddTaskForm = () => {
     }
   };
 
-  if (status === "loading") {
-    return <p className="text-center py-10">Loading...</p>;
-  }
+  
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">

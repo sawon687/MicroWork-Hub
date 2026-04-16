@@ -8,25 +8,27 @@ import {
   Loader2, CheckCircle2
 } from "lucide-react";
 import { motion } from "framer-motion";
+import DashboardHomeLoading from '../LoadingAll/DashbordHomeLoading';
 
 const WorkerDashboard = () => {
   const { data: session } = useSession();
 
   // ওয়ার্কারের ব্যক্তিগত স্ট্যাটাস ফেচ করা
   const { data: stats, isLoading } = useQuery({
-    queryKey: ['worker-stats', session?.user?.email],
+    queryKey: ['worker-stats'],
     queryFn: async () => {
-      const res = await fetch(`/api/worker/stats?email=${session?.user?.email}`);
-      return res.json();
+      const result =await(await fetch(`/api/worker/worker-dashboard`)).json();
+      return result.data;
     },
-    enabled: !!session?.user?.email
+    enabled: !!session?.user?.email,
+     keepPreviousData: true, 
+    staleTime: 30000, 
   });
 
+  
+
   if (isLoading) return (
-    <div className="flex flex-col justify-center items-center h-screen bg-[#F8FAFC]">
-      <Loader2 className="w-10 h-10 text-emerald-500 animate-spin mb-4" />
-      <p className="text-slate-400 font-bold font-syne">Loading your progress...</p>
-    </div>
+    <DashboardHomeLoading></DashboardHomeLoading>
   );
 
   return (

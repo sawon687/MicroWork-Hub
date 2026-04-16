@@ -21,7 +21,9 @@
 .input-focus{
   @apply focus:outline-none focus:ring-1 focus:ring-emerald-400
 }
-
+.text-Transprent{
+  @apply bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text bg-transparent
+}
 
 /* globals.css ফাইলে এটি যোগ করুন */
 @keyframes fadeUp {

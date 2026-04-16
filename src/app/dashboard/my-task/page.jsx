@@ -5,17 +5,23 @@ import { FaPlus, FaRocket, FaListUl } from 'react-icons/fa';
 import Link from 'next/link';
 
 import { useQuery } from '@tanstack/react-query';
+import NormalLoading from '../../../Components/LoadingAll/NormalLoading';
 
 const page =() => {
 
 
-  const {data:myTasks=[],refetch}=useQuery({
+  const {data:myTasks=[],isLoading,refetch}=useQuery({
     queryKey:['my-task'],
     queryFn:async()=>{
        const result=await( (await fetch(`http://localhost:3000/api/my-task`))).json()
 
        return result.data}
 })
+
+if(isLoading)
+{
+  <NormalLoading></NormalLoading>
+}
 
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-20">

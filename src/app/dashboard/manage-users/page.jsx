@@ -8,6 +8,7 @@ import {
   Settings2, AlertCircle, X
 } from "lucide-react";
 import MessageModal from '../../../Components/Ui/MessageModal';
+import NormalLoading from '../../../Components/LoadingAll/NormalLoading';
 
 const ManageUsersPage = () => {
   const queryClient = useQueryClient();
@@ -56,10 +57,7 @@ const ManageUsersPage = () => {
   };
 
   if (isLoading) return (
-    <div className="flex flex-col justify-center items-center h-screen bg-[#F8FAFC]">
-      <Loader2 className="w-12 h-12 text-indigo-600 animate-spin mb-4" />
-      <p className="text-slate-600 font-semibold tracking-wide">Syncing User Database...</p>
-    </div>
+          <NormalLoading></NormalLoading>     
   );
 
   return (

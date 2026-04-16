@@ -20,8 +20,8 @@ const ApplyFormModal = ({ taskId ,taskTitle}) => {
     const pathname = usePathname()
     const { handleSubmit, register, reset, formState: { errors } } = useForm()
 
-    const apply = pathname === '/all-task'
-    const applyNow = pathname.startsWith('/all-task/')
+    const apply = pathname === '/all-tasks'
+    const applyNow = pathname.startsWith('/all-tasks/')
         
 
     useEffect(() => {

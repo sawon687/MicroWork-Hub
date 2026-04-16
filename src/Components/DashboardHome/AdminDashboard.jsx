@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import MessageModal from '../Ui/MessageModal';
 import { useForm } from 'react-hook-form';
 import { useDebounce } from 'use-debounce';
+import DashboardHomeLoading from '../LoadingAll/DashbordHomeLoading';
 
 const AdminDashboard = () => {
   const [processingId, setProcessingId] = useState(null);
@@ -71,10 +72,7 @@ const handlePaymentSuccess = async (request) => {
   };
 
   if (isLoading) return (
-    <div className="flex flex-col justify-center items-center h-screen bg-[#F8FAFC]">
-      <Loader2 className="w-12 h-12 text-blue-600 animate-spin mb-4" />
-      <p className="text-slate-500 font-bold font-syne">Loading Admin Intelligence...</p>
-    </div>
+   <DashboardHomeLoading></DashboardHomeLoading>
   );
 
   return (

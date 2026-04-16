@@ -146,7 +146,7 @@ const NotificationModal = ({ Navbar }) => {
                   <CheckCheck size={14} /> Mark all read
                 </button>
                 <Link 
-                  href="/dashboard/notifications" 
+                  href="notifications" 
                   onClick={() => setOpen(false)}
                   className="text-[10px] font-bold text-emerald-500 hover:underline uppercase tracking-widest"
                 >

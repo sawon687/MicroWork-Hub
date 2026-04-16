@@ -1,8 +1,9 @@
 'use client'
 import React, { useState } from 'react'
 import { motion } from "framer-motion";
-import ContorleAni from '../ContorleAni/ContorleAni';
+
 import HeadingTage from '../Ui/HeadingTage';
+import ContorleAni from '../MotionContorleAni/ContorleAni';
 
 const HowitWork = ({ steps}) => {
       const [fadeUp]=useState(ContorleAni())

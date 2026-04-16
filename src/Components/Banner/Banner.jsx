@@ -1,62 +1,109 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from 'next/link';
+import { useState, useEffect } from "react";
 
-const Banner = () => {
+// banner
+const Banner = ({slides}) => {
+  const [current, setCurrent] = useState(0);
+
+  // Auto Slider Logic
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 5000); // 5 secand One after another
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center w-full justify-center bg-gradient-to-br from-black via-gray-900 to-black text-white pt-10">
-      <div className=" mx-auto text-center   ">
-  <div className="absolute -top-20 left-0 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full"></div>
-      <div className="absolute bottom-0 right-0 w-72 h-72 bg-cyan-500/20 blur-3xl rounded-full"></div>
+    <section className="relative min-h-screen flex items-center w-full justify-center bg-[#011612] text-white overflow-hidden pt-10">
+      
 
-        {/* Badge */}
-        <div className="inline-block mb-6 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-          ⚡ Earn Money Completing Tasks
-        </div>
-
-        {/* Heading */}
-        <motion.h1 
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-bold leading-tight"
+      {/* Dynamic Background Glows */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+          className={`absolute inset-0 z-0`}
         >
-          Complete Tasks.{" "}
-          <span className="text-emerald-400">Earn Coins.</span>{" "}
-          Get Paid.
-        </motion.h1>
+          <div className={`absolute -top-20 left-0 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full`}></div>
+          <div className={`absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 blur-[120px] rounded-full`}></div>
+        </motion.div>
+      </AnimatePresence>
 
-        {/* Description */}
-        <p className="mt-6 text-gray-400 text-lg max-w-2xl mx-auto">
-          Join thousands of workers earning real money by completing simple micro tasks.
-          Post tasks and get them done in minutes.
-        </p>
+      <div className="container mx-auto px-6 relative z-10 text-center">
+       
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            {/* Badge */}
+            <div className="inline-block mt-20 mb-6 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-sm font-bold tracking-wide">
+              {slides[current].badge}
+            </div>
 
-        {/* Buttons */}
-        <div className="mt-8 flex justify-center gap-4 flex-wrap">
-          <button className="bg-emerald-400 hover:bg-emerald-500 text-black px-6 py-3 rounded-full font-semibold flex items-center gap-2">
-            Start Earning →
+            {/* Heading */}
+            <h1 className="text-4xl md:text-7xl font-black leading-tight tracking-tight">
+              {slides[current].heading}
+              <span className="text-emerald-400">{slides[current].highlight}</span>{" "}
+              <br className="hidden md:block" />
+              {slides[current].subHeading}
+            </h1>
+
+            {/* Description */}
+            <p className="mt-8 text-emerald-100/60 text-lg max-w-2xl mx-auto leading-relaxed">
+              {slides[current].description}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* buttons start */}
+        <div className="mt-10 flex justify-center gap-4 flex-wrap">
+             <Link href={'/'}>
+               <button className="bg-background hover:bg-emerald-500 hover:scale-105 transition-all text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+            Start Earning Now →
           </button>
-
-          <button className="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-gray-300">
+             </Link>
+          <button className="bg-white/5 hover:bg-white/10 px-8 py-4 rounded-2xl text-white border border-white/10 backdrop-blur-md transition-all">
             Post a Task
           </button>
         </div>
 
-        {/* Stats */}
-        <div className="mt-12 grid grid-cols-3 gap-6 text-center">
-          <div>
-            <h2 className="text-2xl font-bold text-emerald-400">12K+</h2>
-            <p className="text-gray-400 text-sm">Active Workers</p>
+        {/* Stats Section */}
+        <div className="mt-10 grid  grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto border-t border-emerald-500/10 pt-10">
+          <div className="group">
+            <h2 className="text-3xl font-black text-white group-hover:text-emerald-400 transition-colors">12K+</h2>
+            <p className="text-emerald-100/40 text-sm uppercase tracking-widest mt-1">Active Workers</p>
           </div>
-          <div>
-            <h2 className="text-2xl font-bold text-emerald-400">85K+</h2>
-            <p className="text-gray-400 text-sm">Tasks Completed</p>
+          <div className="group">
+            <h2 className="text-3xl font-black text-white group-hover:text-emerald-400 transition-colors">85K+</h2>
+            <p className="text-emerald-100/40 text-sm uppercase tracking-widest mt-1">Tasks Completed</p>
           </div>
-          <div>
-            <h2 className="text-2xl font-bold text-emerald-400">$250K+</h2>
-            <p className="text-gray-400 text-sm">Paid Out</p>
+          <div className="group">
+            <h2 className="text-3xl font-black text-white group-hover:text-emerald-400 transition-colors">$250K+</h2>
+            <p className="text-emerald-100/40 text-sm uppercase tracking-widest mt-1">Paid Out</p>
           </div>
         </div>
 
+        {/* Slider Dots */}
+        <div className="mt-12 py-5 flex justify-center gap-2">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrent(index)}
+              className={`h-1.5 transition-all duration-300 rounded-full ${
+                current === index ? "w-8 bg-emerald-400" : "w-2 bg-emerald-500/20"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

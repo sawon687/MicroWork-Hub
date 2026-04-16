@@ -7,7 +7,7 @@ const GoogleButton = () => {
             {/* Divider */}
             <div className="relative my-3">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t"></span>
+                <span className="w-full border-t border-gray-400"></span>
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="bg-white px-4 text-gray-400">or</span>

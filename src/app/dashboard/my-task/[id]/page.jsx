@@ -10,6 +10,7 @@ import MessageModal from '../../../../Components/Ui/MessageModal';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { formatDistanceToNow } from 'date-fns';
+import NormalLoading from '../../../../Components/LoadingAll/NormalLoading';
 
 const SubmissionPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -80,9 +81,7 @@ const SubmissionPage = () => {
   );
 
   if (isLoading) return (
-    <div className="flex justify-center items-center h-screen">
-      <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
-    </div>
+    <NormalLoading></NormalLoading>
   );
 
   return (

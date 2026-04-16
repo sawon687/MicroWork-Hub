@@ -17,8 +17,8 @@ const Mullanguage = () => {
       {/* Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl 
-        bg-white/10 backdrop-blur-xl border border-white/10 
+        className="flex items-center gap-2 px-4 py-2 rounded-full
+        bg-white/5  border border-white/10 
         text-emerald-400 hover:bg-white/20 transition-all duration-200"
       >
         <MdLanguage size={18} />

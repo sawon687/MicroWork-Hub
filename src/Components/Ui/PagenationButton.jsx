@@ -1,58 +1,57 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useTransition } from 'react'; // ১. স্মুথ রেন্ডারিংয়ের জন্য ইম্পোর্ট
+import { useTransition } from 'react';
 import { HiOutlineArrowLeft, HiOutlineArrowRight } from 'react-icons/hi';
 
 const PagenationButton = ({ pageNumber }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [isPending, startTransition] = useTransition(); // ২. ট্রানজিশন হুক
+    const [isPending, startTransition] = useTransition();
 
     const currentPage = Number(searchParams.get('page')) || 1;
 
     const gotoPage = (page) => {
-        // ৩. URLSearchParams ব্যবহার করা বেস্ট প্র্যাকটিস
         const params = new URLSearchParams(searchParams);
         params.set('page', page.toString());
-        params.set('limit', '9');
 
-        // ৪. startTransition ব্যবহার করলে রাউটিং আপডেট স্মুথ হয়
         startTransition(() => {
-            router.push(`/all-task?${params.toString()}`, { scroll: false });
+            // আপনার প্রজেক্টের পাথ অনুযায়ী /all-tasks ব্যবহার করেছি
+            router.push(`/all-tasks?${params.toString()}`, { scroll: false });
         });
     }
 
     return (
-        <div className={`max-w-4xl py-10 mx-auto transition-opacity duration-300 ${isPending ? 'opacity-50' : 'opacity-100'}`}>
-            <div className='flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-100'>
+        <div className={`max-w-4xl  mx-auto transition-all duration-500 ${isPending ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
+            <div className='flex justify-between items-center bg-[#0a2f27]/50 backdrop-blur-xl p-4 rounded-[2rem] border border-emerald-500/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]'>
                 
                 {/* Previous Button */}
-                <div className="w-32"> {/* বাটন সরানড়া রোধ করতে ফিক্সড উইথ */}
+                <div className="w-28 md:w-32">
                     {currentPage > 1 && (
                         <button 
                             disabled={isPending}
                             onClick={() => gotoPage(currentPage - 1)}
-                            className='group flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gray-900 text-white border border-gray-300 rounded-lg hover:bg-orange-400 transition-all duration-200 shadow-sm active:scale-95 disabled:opacity-50'
+                            className='group flex items-center gap-2 px-4 py-2 text-sm font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl hover:bg-emerald-500 hover:text-white transition-all duration-300 active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed'
                         >
                             <HiOutlineArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                            <span>Previous</span>
+                            <span className="hidden md:inline">Previous</span>
                         </button>
                     )}
                 </div>
 
                 {/* Page Numbers */}
-                <div className='hidden md:flex items-center gap-2'>
+                <div className='flex items-center gap-2'>
                     {[...Array(pageNumber)].map((_, index) => {
                         const page = index + 1;
+                        // বর্তমান পেজের আশেপাশে শুধু ২-৩টি পেজ দেখানোর লজিক (ঐচ্ছিক)
                         return (
                             <button 
                                 key={page} 
                                 disabled={isPending}
                                 onClick={() => gotoPage(page)}
-                                className={`px-4 py-2 text-sm font-medium border rounded-lg transition-all duration-200 ${
+                                className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-sm font-bold rounded-xl transition-all duration-300 border ${
                                     page === currentPage 
-                                    ? 'bg-gradient-to-r from-emerald-400 to-teal-400 text-white border-transparent shadow-md' 
-                                    : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-100'
+                                    ? 'bg-gradient-to-br from-emerald-400 to-teal-500 text-white border-transparent shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-110 z-10' 
+                                    : 'text-emerald-100/60 bg-emerald-500/5 border-emerald-500/10 hover:bg-emerald-500/20 hover:text-emerald-300'
                                 }`}
                             >
                                 {page}
@@ -62,20 +61,29 @@ const PagenationButton = ({ pageNumber }) => {
                 </div>
 
                 {/* Next Button */}
-                <div className="w-32 flex justify-end">
+                <div className="w-28 md:w-32 flex justify-end">
                     {currentPage < Number(pageNumber) && (
                         <button 
                             disabled={isPending}
                             onClick={() => gotoPage(currentPage + 1)} 
-                            className='group flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gray-900 text-white border border-gray-300 rounded-lg hover:bg-orange-400 transition-all duration-200 shadow-sm active:scale-95 disabled:opacity-50'
+                            className='group flex items-center gap-2
+                             px-4 py-2 text-sm font-bold bg-emerald-500/10 text-emerald-400 border
+                              border-emerald-500/20 rounded-xl hover:bg-emerald-500 hover:text-white transition-all duration-300 active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed'
                         >
-                            <span>Next</span>
+                            <span className="hidden md:inline">Next</span>
                             <HiOutlineArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                         </button>
                     )}
                 </div>
 
             </div>
+            
+            {/* Loading Indicator */}
+            {isPending && (
+                <div className="text-center mt-4">
+                    <span className="text-emerald-400 text-xs tracking-widest uppercase animate-pulse">Updating Tasks...</span>
+                </div>
+            )}
         </div>
     );
 }

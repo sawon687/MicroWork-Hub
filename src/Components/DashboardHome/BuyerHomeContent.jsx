@@ -5,6 +5,7 @@ import {
   ShoppingBag, Clock, CheckCircle, AlertCircle, 
   Plus, ArrowUpRight, TrendingUp, Loader2, TrendingDown 
 } from 'lucide-react';
+import DashboardHomeLoading from '../LoadingAll/DashbordHomeLoading';
 
 const BuyerHomeContent = () => {
   const router = useRouter();
@@ -101,9 +102,7 @@ const BuyerHomeContent = () => {
 
   if (loading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center">
-        <Loader2 className="animate-spin text-blue-500" size={40} />
-      </div>
+      <DashboardHomeLoading></DashboardHomeLoading>
     );
   }
 

@@ -97,9 +97,9 @@ const RegisterForm = () => {
 
   return (
     <>
-    <div className="min-h-screen py-16 bg-gradient-to-br from-slate-900 to-slate-800 flex flex-col items-center justify-start px-4 relative">
+    <div className="min-h-screen  bg-gradient-to-br from-slate-900 to-slate-800 flex flex-col items-center justify-start px-4 relative">
 
-      {/* 🔙 Back Button (Left Top, Glass Effect) */}
+   
       <div className="absolute top-6 left-4">
         <Link href="/">
           <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-gray-100 hover:bg-white/20 transition-all duration-200 shadow-sm hover:shadow-md">
@@ -295,7 +295,7 @@ const RegisterForm = () => {
           </button>
         </form>
 
-        <GoogleButton />
+        
 
         <p className="text-center text-xs text-gray-500 mt-4">
           Already have an account?

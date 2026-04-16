@@ -113,7 +113,7 @@ const SearchModal = () => {
                                 {tasks.length > 0 ? (
                                     <div className="space-y-2">
                                         {tasks.map((task) => (
-                                           <Link  href={`/all-task/${task?._id}`} onClick={()=> setIsOpen(false)}  key={task?._id} >
+                                           <Link  href={`/all-tasks/${task?._id}`} onClick={()=> setIsOpen(false)}  key={task?._id} >
                                            
                                            
                                             <div 

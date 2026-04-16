@@ -57,7 +57,6 @@ export async function GET(req) {
   try {
     const session = await getServerSession(authOptions);
 
-    console.log("session is server my task sawon", session);
 
     if (!session) {
       return Response.json({ message: "No session" }, { status: 401 });

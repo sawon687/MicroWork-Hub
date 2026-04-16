@@ -4,11 +4,14 @@ import { authOptions } from '../auth/[...nextauth]/route';
 import { NextResponse } from 'next/server';
 const subColl = connect('SubmissionColl')
 const taskColl = connect("TaskCollection");
+const userColl=connect('userCOllection');
+
+ const withdrawColl =connect('withdrawColl');
 export async function GET(req) {
   try {
     const session = await getServerSession(authOptions);
 
-    // ১. সেশন চেক করার লজিক ঠিক করা হয়েছে (সেশন না থাকলে বা রোল 'Buyer' না হলে Unauthorized)
+  
     if (!session || session.user?.role !== 'Buyer') {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
@@ -17,24 +20,30 @@ export async function GET(req) {
     
 
 
-    // ডাটা ফেচ করা
-    const taskResult = await taskColl.find({ createdEmail: buyerEmail }).sort({ createdAt: -1 }).toArray();
-    const totalTask = await taskColl.countDocuments({ createdEmail: buyerEmail });
-    
-    // মনে রাখবেন: Submission ড্রাইভার বা ইমেইল ফিল্ড সঠিক কিনা চেক করবেন
-    const subResult = await subColl.find({ createdEmail: buyerEmail }).toArray();
+   
+  
+    const [totalTask,
+taskResult,
+totalsubReveiw,
+totalsubAproved,
+totalRejected,
+]=await Promise.all([
+                taskColl.countDocuments({ createdEmail: buyerEmail }),
+               taskColl.find({ createdEmail: buyerEmail }).sort({ createdAt: -1 }).toArray(),
+           subColl.countDocuments({status:'pending'}),
+          subColl.countDocuments({status:'approved'}),
+            subColl.countDocuments({status:'rejected'})
+            
+    ])
 
-    // ২. .length() এর বদলে শুধু .length হবে (এটি ফাংশন নয়, প্রপার্টি)
-    const totalsubReveiw = subResult.filter(sub => sub.status === 'pending').length;
-    const totalsubAproved = subResult.filter(sub => sub.status === 'approved').length;
-    const totalRejected = subResult.filter(sub => sub.status === 'rejected').length;
-
+ 
     const buyerData = {
       totalTask,
       taskResult,
       totalsubReveiw,
       totalsubAproved,
-      totalRejected
+      totalRejected,
+    
     };
 console.log('data server',buyerData)
     return NextResponse.json({ 

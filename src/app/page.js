@@ -66,10 +66,37 @@ const features = [
       a: "Yes, joining is completely free for both workers and buyers."
     }
   ];
+
+  const slides = [
+  {
+    badge: "⚡ Earn Money Completing Tasks",
+    heading: "Complete Tasks. ",
+    highlight: "Earn Coins.",
+    subHeading: "Get Paid.",
+    description: "Join thousands of workers earning real money by completing simple micro tasks. Post tasks and get them done in minutes.",
+    color: "from-emerald-500/20"
+  },
+  {
+    badge: "🚀 Boost Your Business",
+    heading: "Hire Global ",
+    highlight: "Expert Workers.",
+    subHeading: "Fast Results.",
+    description: "Need something done quickly? Post your task and watch it get completed by our dedicated global workforce in no time.",
+    color: "from-cyan-500/20"
+  },
+  {
+    badge: "💰 Secure & Fast Payments",
+    heading: "Instant ",
+    highlight: "Withdrawals.",
+    subHeading: "Zero Fees.",
+    description: "Your earnings are safe with us. Withdraw your coins instantly to your preferred payment method with maximum security.",
+    color: "from-purple-500/20"
+  }
+];
 export default function Home() {
   return (
     <div className="flex flex-col items-center w-full justify-center  font-sans bg-black">
-    <Banner></Banner>
+    <Banner slides={slides}></Banner>
   
 
      <div className="bg-white px-20">

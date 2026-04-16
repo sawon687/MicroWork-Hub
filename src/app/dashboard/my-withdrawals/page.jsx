@@ -2,6 +2,7 @@
 import React from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { Clock, CheckCircle2, AlertCircle, ArrowLeftRight } from "lucide-react";
+import NormalLoading from '../../../Components/LoadingAll/NormalLoading';
 
 const page = () => {
  
@@ -18,7 +19,10 @@ const page = () => {
     if (status === 'pending') return "bg-amber-100 text-amber-700 border-amber-200";
     return "bg-emerald-100 text-emerald-700 border-emerald-200";
   };
-
+if(isLoading)
+{
+  return <NormalLoading></NormalLoading>
+}
   return (
     <div className="min-h-screen bg-gray-50 p-6 pt-24">
       <div className="max-w-5xl mx-auto">

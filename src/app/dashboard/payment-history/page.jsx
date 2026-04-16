@@ -2,6 +2,7 @@
 import React from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { FileText, Download, User, ExternalLink } from "lucide-react";
+import NormalLoading from '../../../Components/LoadingAll/NormalLoading';
 
 const page = () => {
   const { data: history = [], isLoading } = useQuery({
@@ -12,7 +13,11 @@ const page = () => {
       return result.data || [];
     }
   });
-console.log('payment history ',history)
+
+  if(isLoading)
+  {
+    return <NormalLoading></NormalLoading>
+  }
   return (
     <div className="min-h-screen bg-[#FDFDFF] p-6 pt-24 font-syne">
       <div className="max-w-7xl mx-auto">

@@ -12,6 +12,9 @@ export async function GET(req) {
     const category=searchParams.get('category') 
     const limit=9;
     const skip = limit * (page - 1)
+    
+    console.log('skip this',skip)
+    console.log('category',category)
 
     let query = {}
 

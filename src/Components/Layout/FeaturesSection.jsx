@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import HeadingTage from "../Ui/HeadingTage";
 import { Coins, Shield, Star, TrendingUp, Users, Zap } from "lucide-react";
 import { useState } from "react";
-import ContorleAni from "../ContorleAni/ContorleAni";
+import ContorleAni from '../MotionContorleAni/ContorleAni';
+
 const iconMap = { Coins, Users, Shield, Zap, TrendingUp, Star };
 export default function FeaturesSection({features}) {
   const [fadeUp]=useState(ContorleAni())

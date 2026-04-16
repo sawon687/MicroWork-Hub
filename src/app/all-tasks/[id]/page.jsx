@@ -1,11 +1,10 @@
-
 import { ArrowLeft, Clock, Coins, FileText, Send, Users } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
 import AnimatedTitle from '../../../Components/Ui/AnimatedTitle';
 import ApplyFormModal from '../../../Components/Ui/ApplyFormModal';
 const getTaskItem=async(id)=>{
-   const result=await (await fetch(`http://localhost:3000/api/all-task/${id}`)).json()
+   const result=await (await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/all-task/${id}`)).json()
     
    return result.data
 }
@@ -21,7 +20,7 @@ const task=await getTaskItem(id) || {}
       <div className="bg-gradient-to-b from-emerald-900/20 to-transparent pt-24  pb-12">
         <div className="container mx-auto px-10">
           <Link
-            href={"/all-task" }
+            href={"/all-tasks" }
             className="inline-flex items-center gap-2 text-sm mb-6 py-5 text-emerald-500 hover:text-emerald-400 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Back to All Tasks
