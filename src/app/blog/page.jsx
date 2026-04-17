@@ -14,10 +14,10 @@ export default function page() {
   const regularPosts = blog.filter(b => !b.featured);
 
   return (
-    <div className="min-h-screen bg-[#011612] text-white selection:bg-emerald-500/30">
+    <div className="min-h-screen bg-[#011612]  text-white selection:bg-emerald-500/30">
       
       {/* Header Section */}
-      <section className="pt-32 pb-16 relative overflow-hidden">
+      <section className="pt-32 pb-16 relative md:px-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-20"
           style={{ background: "radial-gradient(circle at 50% 0%, #10b981 0%, transparent 70%)" }}
         />
@@ -34,7 +34,7 @@ export default function page() {
       </section>
 
       {/* Featured Post Section */}
-      <section className="pb-20">
+      <section className="pb-20 md:px-20">
         <div className="container mx-auto px-4">
           <FadeUp delay={0.2}>
             <Link href={`/blog/${featuredPost.id}`}>
@@ -70,7 +70,7 @@ export default function page() {
       {/* Regular Posts Grid */}
       <section className="py-20 bg-black/20">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:px-20 lg:grid-cols-3 gap-8">
             {regularPosts.map((post, i) => (
               <FadeUp key={post.id} delay={i * 0.1}>
                 <article className="group bg-[#062c24] rounded-[2rem] overflow-hidden border border-emerald-500/10 hover:border-emerald-500/30 transition-all flex flex-col h-full">

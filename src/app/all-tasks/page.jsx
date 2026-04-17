@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
 import PagenationButton from "../../Components/Ui/PagenationButton";
 import CategoryButtonorSearch from "../../Components/CategoryButtonandSearchorSort/CategoryButtonorSearch";
-import TaskCardSkeleton from '../../Components/LoadingAll/TaskCardSkeleton ';
 import TaskList from '../../Components/TaskList/TaskList';
 import { Sparkles, LayoutGrid, ArrowLeft } from "lucide-react";
 import Link from 'next/link';
+import TaskGridSkeleton from '../../Components/LoadingAll/TaskGridSkeleton';
 
 export const getTaskData = async (search = "", page = 1, category = "") => {
   const params = new URLSearchParams();
@@ -87,7 +87,7 @@ const AllTasksPage = async ({ searchParams }) => {
         <div className="relative">
           <Suspense
             key={`${params.search}-${params.page}-${params.category}`}
-            fallback={<TaskCardSkeleton count={9} />}
+            fallback={ <TaskGridSkeleton count={9}/>}
           >
             <div className="py-12">
                <TaskList
