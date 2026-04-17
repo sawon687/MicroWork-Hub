@@ -55,6 +55,7 @@ export const authOptions = {
    {     
   
       token.user=user
+      token.role=user?.role
    }
   
 

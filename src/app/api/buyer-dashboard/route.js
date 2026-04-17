@@ -45,7 +45,7 @@ totalRejected,
       totalRejected,
     
     };
-console.log('data server',buyerData)
+
     return NextResponse.json({ 
       message: 'Buyer data found', 
       success: true, 

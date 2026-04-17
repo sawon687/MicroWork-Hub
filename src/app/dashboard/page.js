@@ -17,11 +17,12 @@ if(!session)
 }
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Buyer Role Check */}
+      {role === 'Buyer' && <BuyerHomeContent />}
       {/* Admin Role Check */}
       {role === 'Admin' && <AdminDashboard />}
 
-      {/* Buyer Role Check */}
-      {role === 'Buyer' && <BuyerHomeContent />}
+      
 
       {/* Worker Role Check */}
       {role === 'Worker' && <WorkerDashboard />}

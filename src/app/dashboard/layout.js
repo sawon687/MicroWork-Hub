@@ -40,7 +40,7 @@ const buyerLinks = [
 const adminLinks = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Manage Users", url: "/dashboard/manage-users", icon: Users },
-  { title: "All Tasks", url: "/dashboard/tasks", icon: ListTodo },
+  { title: "Manage All Tasks", url: "/dashboard/task-overview", icon: ListTodo },
   {title:'Payment History',url:'/dashboard/payment-history',icon:Banknote}
 ];
 
@@ -50,8 +50,8 @@ const adminLinks = [
 const getLinks = (role) => {
   let baseLinks = [];
   if (role === "Buyer") baseLinks = buyerLinks;
-  else if (role === "Admin") baseLinks = adminLinks;
-  else baseLinks = workerLinks;
+   if (role === "Admin") baseLinks = adminLinks;
+  if(role==='Worker') baseLinks = workerLinks;
   
   return baseLinks
 };

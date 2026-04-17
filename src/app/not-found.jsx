@@ -89,7 +89,7 @@ export default function NotFound() {
           </button>
 
           <Link href="/">
-            <button className="px-10 py-4 bg-gradient-to-r from-teal-400 to-emerald-400 text-[#0f172a] rounded-2xl font-black shadow-[0_10px_30px_rgba(45,212,191,0.3)] hover:shadow-[0_15px_40px_rgba(45,212,191,0.5)] hover:scale-105 transition-all flex items-center gap-3 active:scale-95">
+            <button className="px-10 py-4 bg-gradient-to-r from-teal-400 to-emerald-400 text-white rounded-2xl font-black shadow-[0_10px_30px_rgba(45,212,191,0.3)] hover:shadow-[0_15px_40px_rgba(45,212,191,0.5)] hover:scale-105 transition-all flex items-center gap-3 active:scale-95">
               <FiHome className="text-xl" />
               Back to Home
             </button>
@@ -103,7 +103,7 @@ export default function NotFound() {
           transition={{ delay: 0.8 }}
           className="mt-20 text-slate-500 text-sm tracking-[0.2em] uppercase font-medium"
         >
-          Microwork-hub • 2026
+          Task Flow• 2026
         </motion.p>
       </div>
 

@@ -95,7 +95,7 @@ const features = [
 ];
 export default function Home() {
   return (
-    <div className="flex flex-col items-center w-full justify-center  font-sans bg-black">
+    <div className="flex flex-col items-center w-full justify-center  font-sans ">
     <Banner slides={slides}></Banner>
   
 

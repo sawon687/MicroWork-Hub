@@ -32,7 +32,7 @@ const AllTasksPage = async ({ searchParams }) => {
   const pageNumber = data?.pageNumber || 1;
 
   return (
-    <div className="min-h-screen bg-[#011612] text-white selection:bg-emerald-500/30">
+    <div className="min-h-screen bg-[#011612] text-white selection:bg-emerald-500/30 px-20">
       
       {/* --- Header Section --- */}
       <header className="relative pt-24 pb-16 overflow-hidden border-b border-emerald-500/5">

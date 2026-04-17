@@ -62,7 +62,7 @@ const CTA = () => {
           </Button>
           
           <Button className={'text-black'}>
-            <Link href="/tasks">Browse Tasks</Link>
+            <Link href="/all-tasks">Browse Tasks</Link>
           </Button>
         </motion.div>
       </div>

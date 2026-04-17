@@ -43,6 +43,8 @@ export async function GET(req) {
       data: { result, pageNumber }
     })
 
+    
+
   } catch (error) {
     return Response.json({ success: false }, { status: 500 })
   }

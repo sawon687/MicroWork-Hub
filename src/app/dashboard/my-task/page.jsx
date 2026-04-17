@@ -50,8 +50,8 @@ if(isLoading)
               </p>
             </div>
 
-            <Link href="/dashboard/create-task">
-              <button className="group bg-emerald-400 hover:bg-emerald-500 text-slate-900 px-8 py-5 rounded-2xl font-black transition-all duration-300 shadow-[0_10px_30px_rgba(52,211,153,0.3)] flex items-center gap-3 hover:-translate-y-1 active:scale-95">
+            <Link href="/dashboard/add-task">
+              <button className="group bg-emerald-400 hover:bg-emerald-500 text-white px-8 py-5 rounded-2xl font-black transition-all duration-300 shadow-[0_10px_30px_rgba(52,211,153,0.3)] flex items-center gap-3 hover:-translate-y-1 active:scale-95">
                 <div className="bg-white/30 p-1.5 rounded-lg group-hover:rotate-90 transition-transform duration-300">
                   <FaPlus size={14} />
                 </div>

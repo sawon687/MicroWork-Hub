@@ -1,4 +1,4 @@
-// app/about/page.js
+
 import Link from "next/link";
 import Image from "next/image"; 
 import { Users, Target, Shield, Award, ArrowLeft, Zap, Globe, TrendingUp, CheckCircle2 } from "lucide-react";

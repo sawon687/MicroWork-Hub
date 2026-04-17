@@ -1,12 +1,14 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState, useEffect } from "react";
 
 // banner
 const Banner = ({slides}) => {
   const [current, setCurrent] = useState(0);
-
+ const {data:session}=useSession()
+ const role=session?.user?.role;
   // Auto Slider Logic
   useEffect(() => {
     const timer = setInterval(() => {
@@ -14,7 +16,20 @@ const Banner = ({slides}) => {
     }, 5000); // 5 secand One after another
     return () => clearInterval(timer);
   }, []);
+const getSecondaryLink = () => {
+  if (role === 'Buyer') return '/dashboard/add-task';
+  if (role === 'Worker') return '/dashboard'; 
+  return '/register';
+};
 
+const getSecondaryText = () => {
+  if (role === 'Buyer') return 'Post a Task';
+  if (role === 'Worker') return 'My Dashboard';
+  return 'Get Started';
+};
+
+const link2 = getSecondaryLink();
+const text2 = getSecondaryText();
   return (
     <section className="relative min-h-screen flex items-center w-full justify-center bg-[#011612] text-white overflow-hidden pt-10">
       
@@ -66,14 +81,16 @@ const Banner = ({slides}) => {
 
         {/* buttons start */}
         <div className="mt-10 flex justify-center gap-4 flex-wrap">
-             <Link href={'/'}>
+             <Link href={'/all-tasks'}>
                <button className="bg-background hover:bg-emerald-500 hover:scale-105 transition-all text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/20">
             Start Earning Now →
           </button>
              </Link>
+        <Link href={link2}>
           <button className="bg-white/5 hover:bg-white/10 px-8 py-4 rounded-2xl text-white border border-white/10 backdrop-blur-md transition-all">
-            Post a Task
+           {text2}
           </button>
+        </Link>
         </div>
 
         {/* Stats Section */}
