@@ -5,30 +5,29 @@ const SkeletonHome = () => {
   return (
     <div className="w-full min-h-screen bg-[#050505] space-y-32 pb-20 overflow-hidden">
       
-      {/* 1. Hero Skeleton - More Dynamic & Centered */}
+
       <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 text-center">
-        {/* Background Glow Effect */}
+
         <div className="absolute top-0 -z-10 h-[500px] w-[500px] bg-emerald-500/10 blur-[120px] rounded-full"></div>
         
-        {/* Badge */}
+
         <div className="h-7 w-40 bg-emerald-500/20 border border-emerald-500/20 animate-pulse rounded-full mb-8"></div>
         
-        {/* Main Heading Lines */}
+
         <div className="space-y-4 mb-8 w-full flex flex-col items-center">
           <div className="h-16 md:h-20 w-full max-w-4xl bg-gradient-to-r from-slate-200/20 via-slate-200/10 to-slate-200/20 rounded-2xl"></div>
           <div className="h-16 md:h-20 w-3/4 max-w-2xl bg-gradient-to-r from-slate-200/20 via-slate-200/10 to-slate-200/20 rounded-2xl"></div>
         </div>
-        
-        {/* Subtext */}
+
         <div className="h-5 w-full max-w-lg bg-slate-200/5 rounded-lg mb-12"></div>
         
-        {/* Buttons */}
+
         <div className="flex flex-wrap justify-center gap-5">
           <div className="h-14 w-48 bg-emerald-500/20 rounded-xl border border-emerald-500/30"></div>
           <div className="h-14 w-48 bg-white/5 rounded-xl border border-white/10"></div>
         </div>
 
-        {/* Stats Section */}
+
         <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-12 w-full max-w-5xl border-t border-white/5 pt-12">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="space-y-3 flex flex-col items-center">
@@ -39,7 +38,7 @@ const SkeletonHome = () => {
         </div>
       </section>
 
-      {/* 2. Features Skeleton - Grid with Card feel */}
+
       <section className="container mx-auto px-6">
         <div className="flex flex-col items-center mb-20 space-y-4">
           <div className="h-10 w-72 bg-slate-200/10 rounded-2xl"></div>
@@ -61,7 +60,7 @@ const SkeletonHome = () => {
         </div>
       </section>
 
-      {/* 3. Top Workers Skeleton - User Cards */}
+
       <section className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="space-y-4">

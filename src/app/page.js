@@ -5,6 +5,7 @@ import FeaturesSection from "@/Components/Layout/FeaturesSection";
 import TopWorkers from "@/Components/Layout/TopWorkers";
 import HowitWork from "@/Components/Layout/HowitWork";
 import TestimonialFAQ from "@/Components/Layout/TestimonialFAQ";
+import Newsletter from '../Components/Layout/Newsletter';
 
 const steps = [
   { step: "01", title: "Create Account", desc: "Sign up as a Worker or Buyer in seconds." },
@@ -95,7 +96,7 @@ const features = [
 ];
 export default function Home() {
   return (
-    <div className="flex flex-col items-center w-full justify-center  font-sans ">
+    <div className="flex flex-col items-center w-full justify-center bg-emerald-950  font-sans ">
     <Banner slides={slides}></Banner>
   
 
@@ -104,7 +105,9 @@ export default function Home() {
           <HowitWork steps={steps} ></HowitWork>
           <TopWorkers topWorkers={topWorkers} ></TopWorkers>
           <TestimonialFAQ testimonials={testimonials} faqs={faqs} ></TestimonialFAQ>
+        
      </div>
+       <Newsletter></Newsletter>
     </div>
   );
 }

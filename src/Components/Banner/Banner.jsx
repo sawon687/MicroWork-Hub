@@ -44,7 +44,7 @@ const text2 = getSecondaryText();
           transition={{ duration: 1 }}
           className={`absolute inset-0 z-0`}
         >
-          <div className={`absolute -top-20 left-0 w-96 h-96 bg-emerald-900 blur-[120px] rounded-full`}></div>
+          <div className={`absolute -top-20 left-0 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full`}></div>
           <div className={`absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 blur-[120px] rounded-full`}></div>
         </motion.div>
       </AnimatePresence>

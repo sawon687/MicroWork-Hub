@@ -4,24 +4,21 @@ const AboutSkeleton = () => {
   return (
     <div className="min-h-screen bg-[#011612] animate-pulse">
       
-      {/* 1. Hero Section Skeleton */}
+
       <section className="pt-32 pb-40 relative overflow-hidden">
         <div className="container mx-auto px-4 text-center">
-          {/* Back Button Skeleton */}
+
           <div className="h-8 w-32 bg-emerald-500/10 rounded-full mx-auto mb-8 border border-emerald-500/20"></div>
-          
-          {/* Main Heading Skeleton */}
+  
           <div className="space-y-4 mb-6">
             <div className="h-16 md:h-24 w-3/4 max-w-4xl bg-white/5 rounded-3xl mx-auto"></div>
             <div className="h-16 md:h-24 w-1/2 max-w-2xl bg-white/5 rounded-3xl mx-auto"></div>
           </div>
-          
-          {/* Subtext Skeleton */}
+
           <div className="h-6 w-full max-w-xl bg-white/5 rounded-lg mx-auto"></div>
         </div>
       </section>
 
-      {/* 2. Stats Section Skeleton */}
       <section className="relative z-30 -mt-24">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
@@ -36,11 +33,11 @@ const AboutSkeleton = () => {
         </div>
       </section>
 
-      {/* 3. Story Section Skeleton */}
+
       <section className="py-32 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-16 max-w-6xl mx-auto">
-            {/* Left Content */}
+    
             <div className="lg:w-1/2 space-y-8">
               <div className="h-12 w-48 bg-white/5 rounded-2xl"></div>
               <div className="space-y-4">
@@ -55,13 +52,13 @@ const AboutSkeleton = () => {
               </div>
             </div>
             
-            {/* Right Image Placeholder */}
+  
             <div className="lg:w-1/2 w-full h-[450px] bg-emerald-950/20 rounded-[3rem] border border-emerald-500/10"></div>
           </div>
         </div>
       </section>
 
-      {/* 4. Values (Bento) Section Skeleton */}
+
       <section className="py-32 bg-black/40">
         <div className="container mx-auto px-4">
           <div className="text-center mb-20 space-y-4">

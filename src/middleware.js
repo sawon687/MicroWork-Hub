@@ -17,7 +17,7 @@ export async function middleware(req) {
  console.log('token is',token)
 //   This login not found and then its is
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/Login", req.url));
   }
 
   const role = token?.role;

@@ -99,12 +99,13 @@ const AllTasksPage = async ({ searchParams }) => {
           </Suspense>
         </div>
 
-        {/* --- Pagination Section --- */}
-        <div className="mt-10 flex justify-center py-10 border-t border-emerald-500/5">
+        
+        
+      </main>
+      {/* --- Pagination Section --- */}
+<div className=" flex justify-center items-center h-[20px] rounded-3xl border-t border-emerald-500/5">
           <PagenationButton pageNumber={pageNumber} />
         </div>
-      </main>
-
       {/* Subtle Footer Glow */}
       <div className="h-32 bg-gradient-to-t from-emerald-500/5 to-transparent" />
     </div>

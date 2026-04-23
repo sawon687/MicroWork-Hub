@@ -57,7 +57,7 @@ const SearchModal = () => {
             <div className="px-4">
                 <button 
                     onClick={() => setIsOpen(true)}
-                    className="group flex items-center gap-3 px-4 py-2 bg-gray-800/40 hover:bg-gray-800/60 border border-white/10 rounded-2xl transition-all duration-300 outline-none"
+                    className="group flex items-center gap-3 px-4 py-2 bg-gray-800/40 hover:bg-gray-800/60 border border-white/10 rounded-full transition-all duration-300 outline-none"
                 >
                     <HiOutlineSearch className="w-5 h-5 text-gray-400 group-hover:text-emerald-400" />
                     <span className="text-sm text-gray-300 font-medium pr-10">Search tasks...</span>

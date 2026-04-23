@@ -3,7 +3,7 @@ import React from "react";
 const TaskCardSkeleton = () => {
   return (
     <div className="bg-[#0a2f27]/30 backdrop-blur-md rounded-[2.5rem] overflow-hidden border border-emerald-500/10 flex flex-col h-[520px] animate-pulse shadow-2xl">
-      {/* Thumbnail Area */}
+
       <div className="relative h-56 w-full bg-emerald-950/40">
         <div className="absolute top-5 left-6 flex gap-2">
           <div className="h-6 w-20 bg-emerald-500/20 rounded-full border border-emerald-500/20"></div>
@@ -12,7 +12,7 @@ const TaskCardSkeleton = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#011612] to-transparent opacity-60"></div>
       </div>
 
-      {/* Content Area */}
+  
       <div className="p-8 flex flex-col flex-grow">
         <div className="flex items-center justify-between mb-6">
           <div className="h-8 w-24 bg-emerald-500/20 rounded-xl border border-emerald-500/20"></div>

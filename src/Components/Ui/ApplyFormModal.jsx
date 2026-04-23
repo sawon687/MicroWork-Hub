@@ -121,7 +121,7 @@ const ApplyFormModal = ({ taskId ,taskTitle}) => {
                 </button>
             ) : null}
 
-            
+<div className='flex justify-center items-center max-w-7xl '>
             {isOpenModal && mounted && createPortal(
                 <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                   
@@ -238,6 +238,7 @@ const ApplyFormModal = ({ taskId ,taskTitle}) => {
                 document.body
             )}
  <MessageModal isOpen={isOpen} onClose={() => setIsOpen(false)} message={message} type={modalType} />
+        </div>
         </>
              
     )

@@ -7,7 +7,7 @@ const ProfileDropdown = ({ user }) => {
   return (
     <div className="fixed top-20 right-5 z-50 w-64 bg-[#0a2f27]/90 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-emerald-500/20 overflow-hidden transform transition-all duration-300 animate-in fade-in zoom-in-95">
       
-      {/* User Info Section */}
+
       <div className="px-6 py-5 border-b border-emerald-500/10 bg-emerald-500/5">
         <p className="text-sm font-bold text-white truncate">
           {user?.name || "User Name"}
@@ -17,7 +17,7 @@ const ProfileDropdown = ({ user }) => {
         </p>
       </div>
 
-      {/* Menu Items */}
+
       <div className="p-2 space-y-1">
         {[
           { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -29,7 +29,7 @@ const ProfileDropdown = ({ user }) => {
             href={item.href}
             className="group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-emerald-500/10 transition-all duration-200"
           >
-            <div className="flex items-center gap-3 text-emerald-100/70 group-hover:text-emerald-400">
+            <div className="flex items-center gap-3 text-white/70 group-hover:text-emerald-400">
               <item.icon size={18} />
               <span className="text-sm font-medium">{item.label}</span>
             </div>

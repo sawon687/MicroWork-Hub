@@ -40,9 +40,6 @@ const AddTaskForm = () => {
     try {
       setLoading(true);
           console.log('session',session)
-
-       
-
       //  total cost
       data.total_cost =
         Number(data.required_workers) * Number(data.payable_amount);

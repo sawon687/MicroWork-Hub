@@ -15,13 +15,13 @@ const PagenationButton = ({ pageNumber }) => {
         params.set('page', page.toString());
 
         startTransition(() => {
-            // আপনার প্রজেক্টের পাথ অনুযায়ী /all-tasks ব্যবহার করেছি
+           
             router.push(`/all-tasks?${params.toString()}`, { scroll: false });
         });
     }
 
     return (
-        <div className={`max-w-4xl  mx-auto transition-all duration-500 ${isPending ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
+        <div className={`max-w-4xl mt-40 mx-auto transition-all duration-500 ${isPending ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
             <div className='flex justify-between items-center bg-[#0a2f27]/50 backdrop-blur-xl p-4 rounded-[2rem] border border-emerald-500/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)]'>
                 
                 {/* Previous Button */}
@@ -42,7 +42,7 @@ const PagenationButton = ({ pageNumber }) => {
                 <div className='flex items-center gap-2'>
                     {[...Array(pageNumber)].map((_, index) => {
                         const page = index + 1;
-                        // বর্তমান পেজের আশেপাশে শুধু ২-৩টি পেজ দেখানোর লজিক (ঐচ্ছিক)
+                      
                         return (
                             <button 
                                 key={page} 
