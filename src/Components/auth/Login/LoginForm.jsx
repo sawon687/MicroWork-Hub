@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Mail, Lock, ArrowRight, EyeOff, Eye } from "lucide-react";
 
 import GoogleButton from "@/Components/GoogleButton/GoogleButton";
 import { motion } from "framer-motion";
@@ -17,6 +17,7 @@ export default function Login() {
   const [isOpen,setOpen]=useState(false);
   const [message,setMessage]=useState('')
   const [modalType,setModalType]=useState('')
+  const[showPassword, setShowPassword]=useState()
   const router=useRouter()
   const {
     register,
@@ -113,15 +114,23 @@ export default function Login() {
             <div className="relative mt-1">
               <Lock className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
               <input
-                type="password"
+                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="w-full border-2 border-gray-200 rounded-xl py-2 pl-10 pr-3 outline-none focus:ring-2 focus:ring-emerald-500"
                 {...register('password',{
                   required: true
                 })}
               />
+               <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-4 text-gray-400"
+                        >
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
             </div>
           </div>
+
 
           {/* Button */}
           <button

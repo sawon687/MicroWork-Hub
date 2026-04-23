@@ -1,4 +1,5 @@
 'user client' 
+import { signIn } from 'next-auth/react';
 import React from 'react'
 import { FcGoogle } from "react-icons/fc";
 const GoogleButton = () => {
@@ -16,7 +17,7 @@ const GoogleButton = () => {
     
             {/* Google Login */}
             <button
-              
+              onClick={()=> signIn('google')}
               className="w-full border-2 border-gray-300 gap-2 rounded-xl py-3 hover:bg-gray-50 flex items-center justify-center"
             >
                   <FcGoogle size={20} />
