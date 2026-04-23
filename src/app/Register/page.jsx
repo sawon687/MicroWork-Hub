@@ -1,4 +1,3 @@
-
 import RegisterForm from '@/Components/auth/RegesterFrom/RegesterFrom'
 import React from 'react'
 
