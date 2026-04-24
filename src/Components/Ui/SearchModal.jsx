@@ -1,10 +1,11 @@
-'use client'
+"use client";
 import React, { useState, useEffect } from 'react';
-import { HiOutlineSearch, HiOutlineX, HiOutlineLightningBolt } from 'react-icons/hi';
+import { HiOutlineSearch, HiOutlineX } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { Coins, Search } from 'lucide-react';
-import Link from 'next/link'
+import { Coins } from 'lucide-react';
+import Link from 'next/link';
+
 const SearchModal = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [tasks, setTasks] = useState([]);
@@ -13,7 +14,7 @@ const SearchModal = () => {
     
     const search = watch('search');
 
-    // Shortcut Key (Ctrl + K) detect korar jonno
+    // Ctrl + K shortcut detection
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -26,7 +27,9 @@ const SearchModal = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    // API fetching logic
+
+
+    // API fetching logic with debounce
     useEffect(() => {
         const fetchTasks = async () => {
             if (!search || search.length < 2) {
@@ -35,10 +38,8 @@ const SearchModal = () => {
             }
             setIsLoading(true);
             try {
-              // Result limit set kora hoyeche
                 const response = await fetch(`/api/all-task?search=${search}`);
                 const result = await response.json();
-                // API structure onujayi data set kora
                 setTasks(result?.data?.result || []);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
@@ -47,17 +48,17 @@ const SearchModal = () => {
             }
         };
 
-        const debounceTimer = setTimeout(fetchTasks, 300); // 300ms delay jate bar bar API call na hoy
+        const debounceTimer = setTimeout(fetchTasks, 300);
         return () => clearTimeout(debounceTimer);
     }, [search]);
 
     return (
-        <>
-            {/* Search Trigger Button */}
+        <div>
+            {/* Desktop Trigger */}
             <div className="px-4 md:block hidden">
                 <button 
                     onClick={() => setIsOpen(true)}
-                    className="group flex items-center gap-3 px-4 py-2 bg-gray-800/40 hover:bg-gray-800/60 border border-white/10 rounded-full transition-all duration-300 outline-none"
+                    className="group flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-300 outline-none"
                 >
                     <HiOutlineSearch className="w-5 h-5 text-gray-400 group-hover:text-emerald-400" />
                     <span className="text-sm text-gray-300 font-medium pr-10">Search tasks...</span>
@@ -65,38 +66,43 @@ const SearchModal = () => {
                         CTRL K
                     </kbd>
                 </button>
-             
             </div>
-                     <button className='md:hidden text-white' onClick={()=> setIsLoading(true)}> <HiOutlineSearch/></button>
+
+            {/* Mobile Trigger */}
+            <button className='md:hidden text-white p-2' onClick={() => setIsOpen(true)}> 
+                <HiOutlineSearch size={22}/>
+            </button>
+
             <AnimatePresence>
                 {isOpen && (
-                    <div className="fixed inset-0 z-99 flex items-start justify-center pt-20 px-4 sm:pt-20">
+                    <div className="fixed inset-0 z-[999] flex items-start justify-center pt-20 px-4">
                         
-                        {/* 1. Backdrop Overlay */}
+                        {/* 1. Backdrop Overlay with Blur Effect */}
                         <motion.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 bg-black/60 backdrop-blur-sm" 
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm" // Yekhane blur add kora hoyeche
                         />
 
                         {/* 2. Modal Container */}
                         <motion.div 
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1,  y: 0 }}
+                            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                            className="relative w-full max-w-xl bg-[#121212] rounded-3xl shadow-2xl overflow-hidden border border-white/10"
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            className="relative w-full max-w-xl bg-[#121212]   rounded-3xl shadow-[0_0_50px_-12px_rgba(16,185,129,0.2)] overflow-hidden border border-white/10"
                         >
                             {/* Input Field Section */}
                             <div className="relative flex items-center px-6 py-5 border-b border-white/5">
-                                <HiOutlineSearch className={`w-6 h-6 ${isLoading ? 'animate-bounce' : ''} text-emerald-500`} />
+                                <HiOutlineSearch className={`w-6 h-6 ${isLoading ? 'animate-pulse text-emerald-400' : 'text-gray-400'}`} />
                                 <form onSubmit={handleSubmit} className="flex-1">
                                     <input 
                                         autoFocus
                                         type="text" 
                                         autoComplete="off"
-                                        placeholder="Type to search tasks..."
+                                        placeholder="Search for projects or tasks..."
                                         className="w-full bg-transparent border-none outline-none px-4 text-gray-100 text-lg placeholder:text-gray-500"
                                         {...register('search')}
                                     />
@@ -110,72 +116,60 @@ const SearchModal = () => {
                             </div>
 
                             {/* Search Results Area */}
-                            <div className="max-h-[450px] overflow-y-auto p-3 custom-scrollbar">
+                            <div className="max-h-[60vh] overflow-y-auto p-3 custom-scrollbar">
                                 {tasks.length > 0 ? (
-                                    <div className="space-y-2">
+                                    <div className="space-y-1">
                                         {tasks.map((task) => (
-                                           <Link  href={`/all-tasks/${task?._id}`} onClick={()=> setIsOpen(false)}  key={task?._id} >
-                                           
-                                           
-                                            <div 
-                                           
-                                                className="group flex items-center my-4 gap-4 p-3 rounded-2xl bg-white/5 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/20 transition-all duration-200 cursor-pointer"
-                                            >
-                                                {/* Task Image */}
-                                                <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0">
-                                                    <img 
-                                                        src={task.task_image || 'https://via.placeholder.com/100'} 
-                                                        alt="task"
-                                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                    />
-                                                </div>
-
-                                                {/* Task Title & Desc */}
-                                                <div className="flex-1 min-w-0">
-                                                    <h3 className="text-sm font-semibold text-gray-100 truncate group-hover:text-emerald-400 transition-colors">
-                                                        {task.task_title}
-                                                    </h3>
-                                                    <p className="text-xs text-gray-400 line-clamp-1 mt-0.5">
-                                                        {task.task_detail || 'No description provided for this task.'}
-                                                    </p>
-                                                </div>
-
-                                                {/* Reward Section */}
-                                                <div className="text-right">
-                                                    <div className="flex items-center gap-1 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">
-                                                        <span className="text-xs font-bold text-emerald-400">{task.payable_amount}</span>
-                                                        <Coins className="w-3 h-3 text-emerald-400" />
+                                            <Link href={`/all-tasks/${task?._id}`} onClick={() => setIsOpen(false)} key={task?._id}>
+                                                <div className="group flex items-center gap-4 p-3 rounded-2xl bg-transparent hover:bg-white/5 transition-all duration-200 cursor-pointer">
+                                                    <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0 border border-white/5">
+                                                        <img 
+                                                            src={task.task_image || 'https://via.placeholder.com/100'} 
+                                                            alt=""
+                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                        />
                                                     </div>
-                                                    <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-wider font-bold">Reward</p>
+
+                                                    <div className="flex-1 min-w-0">
+                                                        <h3 className="text-sm font-bold text-gray-100 truncate group-hover:text-emerald-400 transition-colors">
+                                                            {task.task_title}
+                                                        </h3>
+                                                        <p className="text-xs text-gray-500 line-clamp-1 mt-0.5 font-medium">
+                                                            {task.task_detail || 'View task details...'}
+                                                        </p>
+                                                    </div>
+
+                                                    <div className="text-right flex-shrink-0">
+                                                        <div className="flex items-center gap-1 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">
+                                                            <span className="text-xs font-black text-emerald-400">{task.payable_amount}</span>
+                                                            <Coins className="w-3 h-3 text-emerald-400" />
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div></Link>
+                                            </Link>
                                         ))}
                                     </div>
                                 ) : (
                                     <div className="py-20 text-center">
-                                        <div className="inline-flex p-4 rounded-full bg-white/5 mb-4">
-                                            <HiOutlineSearch className="w-8 h-8 text-gray-600" />
+                                        <div className="inline-flex p-4 rounded-full bg-white/5 mb-4 text-gray-600">
+                                            <HiOutlineSearch size={32} />
                                         </div>
-                                        <p className="text-gray-400 text-sm font-medium italic">
-                                            {search ? `No tasks matching "${search}"` : "Search for tasks by title or description"}
+                                        <p className="text-gray-500 text-sm font-medium italic">
+                                            {search ? `No results found for "${search}"` : "Start typing to search tasks..."}
                                         </p>
                                     </div>
                                 )}
                             </div>
 
-                            {/* Footer Info */}
-                            <div className="bg-black/40 px-6 py-4 border-t border-white/5 flex justify-between items-center">
-                                <div className="flex gap-4">
-                                    <span className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                                        <kbd className="px-1.5 py-0.5 border border-white/10 rounded bg-white/5 shadow-sm text-gray-300">ESC</kbd> CLOSE
-                                    </span>
-                                    <span className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                                        <kbd className="px-1.5 py-0.5 border border-white/10 rounded bg-white/5 shadow-sm text-gray-300">↵</kbd> SELECT
+                            {/* Footer */}
+                            <div className="bg-black/20 px-6 py-3 border-t border-white/5 flex justify-between items-center">
+                                <div className="flex gap-4 items-center">
+                                    <span className="text-[10px] text-gray-500 font-bold tracking-widest flex items-center gap-1">
+                                        <kbd className="px-1.5 py-0.5 border border-white/10 rounded bg-white/5 text-gray-300">ESC</kbd> CLOSE
                                     </span>
                                 </div>
-                                <div className="text-emerald-500 text-[10px] font-black italic tracking-tighter flex items-center gap-1">
-                                    <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                    SEARCH ENGINE v2.0
+                                <div className="text-emerald-500/50 text-[10px] font-black italic tracking-wider">
+                                    AURA ENGINE v2.0
                                 </div>
                             </div>
                         </motion.div>
@@ -187,9 +181,6 @@ const SearchModal = () => {
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 4px;
                 }
-                .custom-scrollbar::-webkit-scrollbar-track {
-                    background: transparent;
-                }
                 .custom-scrollbar::-webkit-scrollbar-thumb {
                     background: rgba(255, 255, 255, 0.1);
                     border-radius: 10px;
@@ -198,7 +189,7 @@ const SearchModal = () => {
                     background: rgba(16, 185, 129, 0.5);
                 }
             `}</style>
-        </>
+        </div>
     );
 };
 

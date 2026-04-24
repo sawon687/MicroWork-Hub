@@ -31,9 +31,9 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
     
-      <body className="min-h-full   flex  flex-col  mx-auto  ">
+      <body className="min-h-full  w-full relative  flex  flex-col justify-center mx-auto  ">
        <Navbar/>
-         <div className='min-h-screen '>
+         <div className='min-h-screen w-full mx-auto overflow-hidden'>
            {children}
          </div>
           <Footer/>
