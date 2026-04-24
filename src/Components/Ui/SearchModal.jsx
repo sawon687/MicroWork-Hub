@@ -69,7 +69,7 @@ const SearchModal = () => {
 
             <AnimatePresence>
                 {isOpen && (
-                    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4 sm:pt-20">
+                    <div className="fixed inset-0 z-99 flex items-start justify-center pt-20 px-4 sm:pt-20">
                         
                         {/* 1. Backdrop Overlay */}
                         <motion.div 
@@ -82,8 +82,8 @@ const SearchModal = () => {
 
                         {/* 2. Modal Container */}
                         <motion.div 
-                            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1,  y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: -10 }}
                             className="relative w-full max-w-xl bg-[#121212] rounded-3xl shadow-2xl overflow-hidden border border-white/10"
                         >

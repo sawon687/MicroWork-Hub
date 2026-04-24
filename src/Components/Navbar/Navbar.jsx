@@ -34,7 +34,7 @@ const Navbar = () => {
           <NavLink href="/Contact" label="Contact" active={pathname === "/Contact"} />
           
           <div className="h-4 w-[1px] bg-white/10 mx-2" />
-          <div className="hover:scale-110 transition-transform">
+          <div className=" transition-transform">
             <SearchModal />
           </div>
         </div>
