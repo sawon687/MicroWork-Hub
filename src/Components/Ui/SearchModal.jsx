@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { HiOutlineSearch, HiOutlineX, HiOutlineLightningBolt } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { Coins } from 'lucide-react';
+import { Coins, Search } from 'lucide-react';
 import Link from 'next/link'
 const SearchModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +54,7 @@ const SearchModal = () => {
     return (
         <>
             {/* Search Trigger Button */}
-            <div className="px-4">
+            <div className="px-4 md:block hidden">
                 <button 
                     onClick={() => setIsOpen(true)}
                     className="group flex items-center gap-3 px-4 py-2 bg-gray-800/40 hover:bg-gray-800/60 border border-white/10 rounded-full transition-all duration-300 outline-none"
@@ -65,8 +65,9 @@ const SearchModal = () => {
                         CTRL K
                     </kbd>
                 </button>
+             
             </div>
-
+                     <button className='md:hidden text-white' onClick={()=> setIsLoading(true)}> <HiOutlineSearch/></button>
             <AnimatePresence>
                 {isOpen && (
                     <div className="fixed inset-0 z-99 flex items-start justify-center pt-20 px-4 sm:pt-20">

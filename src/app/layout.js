@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
     
       <body className="min-h-full   flex  flex-col  mx-auto  ">
        <Navbar/>
-         <div className='min-h-screen'>
+         <div className='min-h-screen '>
            {children}
          </div>
           <Footer/>
