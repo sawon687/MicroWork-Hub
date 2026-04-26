@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import MessageModal from './MessageModal'
+import { useRouter } from 'next/router'
 
 const ApplyFormModal = ({ taskId ,taskTitle}) => {
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -19,7 +20,7 @@ const ApplyFormModal = ({ taskId ,taskTitle}) => {
     const { data: session } = useSession()
     const pathname = usePathname()
     const { handleSubmit, register, reset, formState: { errors } } = useForm()
-
+    const router=useRouter()
     const apply = pathname === '/all-tasks'
     const applyNow = pathname.startsWith('/all-tasks/')
         
@@ -112,11 +113,23 @@ const ApplyFormModal = ({ taskId ,taskTitle}) => {
         <>
             
             {apply ? (
-                <button onClick={() => setIsOpenModal(true)} className="flex-1 text-white cursor-pointer rounded-xl py-2 px-4 bg-gradient-to-r to-teal-400 from-emerald-400 hover:opacity-90 active:scale-95 transition-all">
+                <button onClick={() =>{
+                    if(!session)
+                    {
+                        router.push('/Login')
+                    }
+                    
+                    setIsOpenModal(true)}} className="flex-1 text-white cursor-pointer rounded-xl py-2 px-4 bg-gradient-to-r to-teal-400 from-emerald-400 hover:opacity-90 active:scale-95 transition-all">
                     Apply
                 </button>
             ) : applyNow ? (
-                <button onClick={() => setIsOpenModal(true)} className="w-full bg-gradient-to-r from-emerald-400 to-teal-400 hover:opacity-90 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-lg shadow-lg active:scale-95 transition-all">
+                <button onClick={() =>{
+                    if(!session)
+                    {
+                        router.push('/Login')
+                    }
+                    
+                    setIsOpenModal(true)}} className="w-full bg-gradient-to-r from-emerald-400 to-teal-400 hover:opacity-90 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-lg shadow-lg active:scale-95 transition-all">
                     <Send className="w-5 h-5" /> APPLY NOW
                 </button>
             ) : null}
