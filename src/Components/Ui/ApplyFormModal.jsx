@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom' 
 import { Send, X, Image as ImageIcon, Link as LinkIcon, UploadCloud, Loader2 } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
 import MessageModal from './MessageModal'
-import { useRouter } from 'next/router'
+
 
 const ApplyFormModal = ({ taskId ,taskTitle}) => {
     const [isOpenModal, setIsOpenModal] = useState(false)
