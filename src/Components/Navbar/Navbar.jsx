@@ -47,7 +47,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-[100]  border-b border-white/5 bg-black/40 backdrop-blur-2xl">
-        <div className="max-w-[1440px] w-full mx-auto px-4 md:px-10 py-3 md:py-4 flex items-center justify-between">
+        <div className="max-w-[1440px] w-full mx-auto px-2 md:px-10 py-3 md:py-4 flex items-center justify-between">
           
           <Logo />
 
@@ -64,13 +64,13 @@ const Navbar = () => {
 
           {/* RIGHT SECTION */}
           <div className="flex items-center gap-2 md:gap-4">
-            <div className="hidden lg:block">
+            <div className="hidden md:block">
               <Mullanguage />
             </div>
 
             {session?.user ? (
-              <div className="flex items-center gap-2 bg-white/5 p-1 pr-2 rounded-full border border-white/10">
-                <div className="pl-1 md:pl-2 scale-90 md:scale-100">
+              <div className="flex items-center   gap-1 md:gap-2 bg-white/5 p-1 pr-2 rounded-full border border-white/10">
+                <div className="pl-1 md:pl-2 hidden md:block   scale-90 md:scale-100">
                   <LiveCoin />
                 </div>
                 <NotificationModal Navbar={'Navbar'} />
@@ -97,7 +97,7 @@ const Navbar = () => {
             )}
 
             {/* MOBILE CONTROLS */}
-            <div className="flex items-center lg:hidden gap-1">
+            <div className="flex items-center  lg:hidden gap-1">
               <SearchModal  />
               <button 
                 onClick={() => setMobileNav(!mobileNav)} 
@@ -156,7 +156,12 @@ const Navbar = () => {
 
                 <div>
                   <p className="text-gray-500 text-[10px] uppercase tracking-widest mb-4 font-bold">Preferences</p>
-                  <Mullanguage />
+                      <div className='flex items-center px-5'>
+                           <Mullanguage />
+                   <div className="pl-1 my-2 md:hidden  scale-100 ">
+                  <LiveCoin />
+                </div>
+                      </div>
                 </div>
 
                 <div className="flex flex-col gap-2">

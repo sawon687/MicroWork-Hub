@@ -34,7 +34,7 @@ const Logo = () => {
                </div>
      
                <div className="flex flex-col">
-                 <h1 className="text-xl font-black tracking-tighter leading-none flex items-center">
+                 <h1 className="text-xl  font-black tracking-tighter leading-none flex items-center">
                    <span className="text-white">TASK</span>
                    <span className="text-emerald-500 italic ml-0.5">FLOW</span>
                  </h1>
