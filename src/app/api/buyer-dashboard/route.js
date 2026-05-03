@@ -4,9 +4,6 @@ import { authOptions } from '../auth/[...nextauth]/route';
 import { NextResponse } from 'next/server';
 const subColl = connect('SubmissionColl')
 const taskColl = connect("TaskCollection");
-const userColl=connect('userCOllection');
-
- const withdrawColl =connect('withdrawColl');
 export async function GET(req) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,7 +13,7 @@ export async function GET(req) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const buyerEmail = session.user.email;
+    const buyerEmail = session.user?.email;
     
 
 
@@ -30,9 +27,9 @@ totalRejected,
 ]=await Promise.all([
                 taskColl.countDocuments({ createdEmail: buyerEmail }),
                taskColl.find({ createdEmail: buyerEmail }).sort({ createdAt: -1 }).toArray(),
-           subColl.countDocuments({status:'pending'}),
-          subColl.countDocuments({status:'approved'}),
-            subColl.countDocuments({status:'rejected'})
+           subColl.countDocuments({createdEmail:buyerEmail, status:'pending'}),
+          subColl.countDocuments({createdEmail:buyerEmail, status:'approved'}),
+            subColl.countDocuments({createdEmail:buyerEmail, status:'rejected'})
             
     ])
 
