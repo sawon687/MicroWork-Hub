@@ -13,7 +13,7 @@ const page =() => {
   const {data:myTasks=[],isLoading,refetch}=useQuery({
     queryKey:['my-task'],
     queryFn:async()=>{
-       const result=await( (await fetch(`http://localhost:3000/api/my-task`))).json()
+       const result=await( (await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/my-task`))).json()
 
        return result.data}
 })
