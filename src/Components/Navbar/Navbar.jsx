@@ -144,7 +144,7 @@ const Navbar = () => {
                       <Link onClick={() => setMobileNav(false)} href="/dashboard" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl text-white font-semibold">
                         <LayoutDashboard size={18} className="text-emerald-400" /> Dashboard
                       </Link>
-                      <Link onClick={() => setMobileNav(false)} href="/dashboard/profile" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl text-white font-semibold">
+                      <Link onClick={() => setMobileNav(false)} href="/my-profile" className="flex items-center gap-3 p-3 bg-white/5 rounded-xl text-white font-semibold">
                         <User size={18} className="text-emerald-400" /> Profile
                       </Link>
                       <button onClick={() => {signOut(); setMobileNav(false);}} className="flex items-center gap-3 p-3 bg-red-500/10 rounded-xl text-red-400 font-semibold mt-2">
