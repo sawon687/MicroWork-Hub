@@ -1,36 +1,231 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+ঠিক আছে — আমি তোমার **TaskFlow README টা Aura-এর মতো clean, structured, professional SaaS style এ rewrite করে দিলাম** 👇
 
-## Getting Started
+---
 
-First, run the development server:
+# 🚀 TaskFlow — Micro-Task Marketplace
+
+## 🔗 Live Demo
+
+https://taskflow-umber-six.vercel.app/
+
+---
+
+## 📖 Overview
+
+TaskFlow is a **coin-based micro-task marketplace platform** where users work as Buyers and Solvers in a gamified freelancing ecosystem.
+
+It simulates a real-world freelancing system with:
+
+* Task posting & completion
+* Coin-based economy
+* Approval-based workflow
+* Withdrawal system
+* Admin-controlled platform
+
+---
+
+## ✨ Key Features
+
+### 🔄 Micro-Task Workflow System
+
+* Buyers create tasks using coins
+* Solvers apply and complete tasks
+* Buyers/Admin review submissions
+* Approved tasks trigger coin transfer
+* Full task lifecycle tracking
+
+---
+
+### 🪙 Coin Economy System
+
+* Buyers receive initial coins on signup
+* Coins are deducted when creating tasks
+* Task blocked if balance is insufficient
+* Automatic coin transfer after approval
+
+---
+
+### 💸 Withdrawal System
+
+* Solvers can request withdrawal after **200+ coins**
+* Admin reviews and approves payout requests
+* Secure and controlled withdrawal flow
+
+---
+
+### 🎁 Onboarding Reward System
+
+* Buyer: 20 welcome coins
+* Solver: 10 welcome coins
+* Boosts early platform engagement
+
+---
+
+### 🔐 Authentication & Security
+
+* Firebase Authentication (Login/Register)
+* JWT-based session handling
+* Role-based access control:
+
+  * Buyer
+  * Solver
+  * Admin
+
+---
+
+### 📊 Admin Dashboard
+
+* Manage users
+* Approve tasks
+* Handle withdrawals
+* Monitor platform activity
+* Full system control
+
+---
+
+# 🚀 Next.js Full Stack SaaS Project
+
+## 🛠 Tech Stack
+
+### 🖥 Frontend
+- Next.js (App Router)
+- React.js
+- JavaScript
+- Tailwind CSS
+- Framer Motion
+- Axios
+
+### ⚙ Backend (Inside Next.js)
+- Next.js Route Handlers (app/api)
+- JWT Authentication
+- Middleware (Route Protection)
+
+### 🗄 Database
+- MongoDB
+
+---
+
+## 🚀 Features Summary
+
+* 🔐 User Authentication (Login/Register)
+* 🧑‍💼 Role-based Dashboard System
+* 🪙 Coin Economy System
+* 📦 Task Management System
+* 💸 Withdrawal System
+* 📊 Admin Control Panel
+* ⚡ Fast API architecture
+
+---
+
+## 📂 Project Structure
+
+```text
+app/
+│
+├── layout.js
+├── page.js
+├── globals.css
+├── not-found.jsx
+│
+├── (auth)/
+│   ├── login/
+│   ├── register/
+│
+├── dashboard/
+│   ├── create-project/
+│   ├── manage-project/
+│   ├── manage-users/
+│   ├── profile/
+│   ├── my-requests/
+│   ├── project-list/
+│   ├── user-project/
+│   └── page.js
+│
+├── about/
+├── contact/
+├── blog/
+├── project/
+├── notifications/
+├── unauthorized/
+│
+├── api/
+│   ├── auth/
+│   ├── users/
+│   ├── projects/
+```
+
+---
+
+## ⚙️ Installation
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/your-username/taskflow.git
+cd taskflow
+```
+
+---
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+### 3️⃣ Environment Variables
+
+```env
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_secret_key
+FIREBASE_API_KEY=your_firebase_key
+```
+
+---
+
+### 4️⃣ Run Project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📦 Core Workflow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Buyer signs up → gets coins
+2. Buyer creates task → coins deducted
+3. Solver applies for task
+4. Solver completes task
+5. Buyer/Admin approves submission
+6. Coins transferred to solver
+7. Solver requests withdrawal
+8. Admin approves payout
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔮 Future Improvements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Real-time chat system
+* Payment gateway integration (Stripe / SSLCommerz)
+* AI-based task matching
+* Notification system (WebSocket)
+* Mobile app version
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 👨‍💻 Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**MD Al Jihad Sawon**
+Full Stack Developer (MERN / Next.js)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🔗 LinkedIn
+[https://www.linkedin.com/in/md-al-jihad-sawon-6a27482a3/](https://www.linkedin.com/in/md-al-jihad-sawon-6a27482a3/)
+
+---
+
+
+---
+
